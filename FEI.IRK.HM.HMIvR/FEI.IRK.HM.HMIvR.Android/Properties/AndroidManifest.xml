@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="HMI_v_Robotike.HMI_v_Robotike" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="15" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<application android:label="HMI v Robotike"></application>
+</manifest>

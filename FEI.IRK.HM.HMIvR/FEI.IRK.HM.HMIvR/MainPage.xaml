@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FEI.IRK.HM.HMIvR"
+             x:Class="FEI.IRK.HM.HMIvR.MainPage"
+             Title="HMI v Robotike">
+            <!-- Padding="0,20,0,0" -->
+
+    <ContentPage.Content>
+        <StackLayout>
+            <!-- <Label Text="Predná kamera:" /> -->
+            <local:CameraPreview Camera="Front" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
