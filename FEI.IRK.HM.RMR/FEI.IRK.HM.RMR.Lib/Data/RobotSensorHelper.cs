@@ -183,7 +183,15 @@ namespace FEI.IRK.HM.RMR.Lib
 
             // OK
             ProcessingSuccess = true;
-            ProcessingErrors = String.Format("Súbor senzorových dát iRobot Create '{0}' úspešne nahraný!", Path.GetFileName(RobotSensorFile));
+            if (DoDeserialize)
+            {
+                ProcessingErrors = String.Format("Súbor senzorových dát iRobot Create '{0}' úspešne nahraný!", Path.GetFileName(RobotSensorFile));
+            }
+            else
+            {
+                ProcessingErrors = String.Format("Súbor '{0}' je platný súbor senzorových dát robota iRobot Create!", Path.GetFileName(RobotSensorFile));
+            }
+            
             return SensorDataList;
 
         }

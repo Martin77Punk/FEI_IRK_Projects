@@ -14,9 +14,9 @@ namespace FEI.IRK.HM.RMR.App
     {
 
         // SETTING Constants:
-        private readonly decimal RobotDiameterMin = 15;
-        private readonly decimal RobotDiameterMax = 50;
-        private readonly decimal RobotDiameterDef = 20;
+        private readonly decimal RobotDiameterMin = 150;
+        private readonly decimal RobotDiameterMax = 250;
+        private readonly decimal RobotDiameterDef = 200;
         private readonly Boolean MapShowAll = false;
         private readonly decimal MapQuantisationMin = 5;
         private readonly decimal MapQuantisationMax = 50;
@@ -30,6 +30,8 @@ namespace FEI.IRK.HM.RMR.App
 
         // Timelines
         private LocalizationTimeline TimelineLocalization;
+        private NavigationTimeline TimelineNavigation;
+        private MappingTimeline TimelineMapping;
 
         // Control
         private int CurrentFrame = 0;
@@ -80,15 +82,15 @@ namespace FEI.IRK.HM.RMR.App
             
             // Initialize Form Components: TimeTrackBar
             TimeTrackBar.Minimum = 0;
-            TimeTrackBar.Maximum = TimelineLocalization.GetTotalFrames();
+            TimeTrackBar.Maximum = TimelineLocalization.TotalFrames;
             TimeTrackBar.SmallChange = 1;
-            TimeTrackBar.LargeChange = TimelineLocalization.GetFramesCountInSecond();
+            TimeTrackBar.LargeChange = TimelineLocalization.FramesCountInSecond;
 
             // Initialize Form Components: TimeNumericBox
             TimeNumericBox.Minimum = 0;
-            TimeNumericBox.Maximum = TimelineLocalization.GetTotalTime();
-            TimeNumericBox.DecimalPlaces = TimelineLocalization.GetDecimalPlacesForSeconds();
-            TimeNumericBox.Increment = TimelineLocalization.GetMinimumSecondsIncrement();
+            TimeNumericBox.Maximum = TimelineLocalization.TotalTime;
+            TimeNumericBox.DecimalPlaces = TimelineLocalization.DecimalPlacesForSeconds;
+            TimeNumericBox.Increment = TimelineLocalization.MinimumSecondsIncrement;
 
 
             // Initialize Form Components: RobotDiameterNumericBox
@@ -106,7 +108,7 @@ namespace FEI.IRK.HM.RMR.App
 
             // Initialize PlayerTimer
             PlayerTimer.Interval = 1;
-            int TimelineDecimalPlaces = TimelineLocalization.GetDecimalPlacesForSeconds();
+            int TimelineDecimalPlaces = TimelineLocalization.DecimalPlacesForSeconds;
             for (int i = 3; i > TimelineDecimalPlaces && i >= 0; i--)
             {
                 PlayerTimer.Interval = PlayerTimer.Interval * 10;
@@ -120,14 +122,28 @@ namespace FEI.IRK.HM.RMR.App
         {
             // Initialize LocalizationTimeline
             TimelineLocalization = new LocalizationTimeline(SensorData, ScanData);
-            TimelineLocalization.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task1ImageBox, Task1FrameTextBox, Task1TimeTextBox, Task1PosXTextBox, Task1PosYTextBox, Task1AngleTextBox, Task1VelocityTextBox, Task1LastSensorTextBox, Task1SensorListBox, Task1LastScanTextBox, Task1ScanListBox);
+            TimelineLocalization.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task1ImageBox, Task1FrameTextBox, Task1TimeTextBox, Task1PosXTextBox, Task1PosYTextBox, Task1AngleTextBox, Task1VelocityTextBox, Task1LastSensorTextBox, Task1SensorListBox, null, null, null, null, null);
+
+            // Initialize NavigationTimeline
+            TimelineNavigation = new NavigationTimeline(SensorData, ScanData);
+            TimelineNavigation.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task2ImageBox, Task2FrameTextBox, Task2TimeTextBox, null, null, null, null, null, null, Task2LastScanTextBox, Task2ScanListBox, null, null, Task2NavigationText);
+
+            // Initialize MappingTimeline
+            TimelineMapping = new MappingTimeline(SensorData, ScanData);
+            TimelineMapping.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task3ImageBox, Task3FrameTextBox, Task3TimeTextBox, Task3PosXTextBox, Task3PosYTextBox, Task3AngleTextBox, Task3VelocityTextBox, null, null, null, null, Task3LastDataTextBox, Task3DataListBox, null);
 
         }
 
 
         private void TimelinesUpdateCurrentFrame()
         {
+            // Quit navigations
+            TimelineNavigation.NavigationEnd();
+
+            // Advance to new frame
             TimelineLocalization.GoToFrame(CurrentFrame);
+            TimelineNavigation.GoToFrame(CurrentFrame);
+            TimelineMapping.GoToFrame(CurrentFrame);
         }
 
 
@@ -135,7 +151,7 @@ namespace FEI.IRK.HM.RMR.App
 
         private void PlayerStart()
         {
-            if (CurrentFrame == TimelineLocalization.GetTotalFrames())
+            if (CurrentFrame == TimelineLocalization.TotalFrames)
             {
                 PlayerGotoFrame(0);
             }
@@ -169,7 +185,7 @@ namespace FEI.IRK.HM.RMR.App
             if (FromPlayTimer)
             {
                 // Playing
-                if (CurrentFrame == TimelineLocalization.GetTotalFrames())
+                if (CurrentFrame == TimelineLocalization.TotalFrames)
                 {
                     PlayerStop();
                     return;
@@ -192,7 +208,7 @@ namespace FEI.IRK.HM.RMR.App
                     CurrentSecond = Math.Ceiling(CurrentSecond);
                 }
                 CurrentFrame = TimelineLocalization.Time2FrameNo(CurrentSecond);                
-                if (CurrentFrame > TimelineLocalization.GetTotalFrames()) CurrentFrame = TimelineLocalization.GetTotalFrames();
+                if (CurrentFrame > TimelineLocalization.TotalFrames) CurrentFrame = TimelineLocalization.TotalFrames;
             }
             PlayerUpdateComponents();
             TimelinesUpdateCurrentFrame();
@@ -231,7 +247,7 @@ namespace FEI.IRK.HM.RMR.App
         private void PlayerFastForward()
         {
             PlayerStop();
-            CurrentFrame = TimelineLocalization.GetTotalFrames();
+            CurrentFrame = TimelineLocalization.TotalFrames;
             PlayerUpdateComponents();
             TimelinesUpdateCurrentFrame();
         }
@@ -266,6 +282,15 @@ namespace FEI.IRK.HM.RMR.App
         {
             PlayerStop();
             CurrentFrame = TimelineLocalization.GetFrameNoWithNthScanData(ScanItemIdx);
+            PlayerUpdateComponents();
+            TimelinesUpdateCurrentFrame();
+        }
+
+
+        private void PlayerGotoData(int DataItemIdx)
+        {
+            PlayerStop();
+            CurrentFrame = TimelineLocalization.GetFrameNoWithNthAnyData(DataItemIdx);
             PlayerUpdateComponents();
             TimelinesUpdateCurrentFrame();
         }
@@ -388,9 +413,60 @@ namespace FEI.IRK.HM.RMR.App
             PlayerGotoSensorData(Task1SensorListBox.SelectedIndex);
         }
 
-        private void Task1ScanListBox_SelectedIndexChanged(object sender, EventArgs e)
+        #endregion
+
+
+        #region Task2 Events
+
+        private void Task2ScanListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PlayerGotoScanData(Task1ScanListBox.SelectedIndex);
+            PlayerGotoScanData(Task2ScanListBox.SelectedIndex);
+        }
+
+        private void Task2ButtonNavigate_Click(object sender, EventArgs e)
+        {
+            TimelineNavigation.NavigationStart();
+        }
+
+        private void Task2ButtonCancel_Click(object sender, EventArgs e)
+        {
+            TimelineNavigation.NavigationEnd();
+        }
+
+        private void Task2ImageBox_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs mea = (MouseEventArgs)e;
+            TimelineNavigation.NavigateTo(mea.X, mea.Y);
+        }
+
+        #endregion
+
+
+        #region Task3 events
+
+        private void Task3DataListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PlayerGotoData(Task3DataListBox.SelectedIndex);
+        }
+
+        #endregion
+
+
+        #region Task4 events
+
+        private void Task4ButtonTrajectory_Click(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void Task4ButtonCancel_Click(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void Task4ImageBox_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         #endregion

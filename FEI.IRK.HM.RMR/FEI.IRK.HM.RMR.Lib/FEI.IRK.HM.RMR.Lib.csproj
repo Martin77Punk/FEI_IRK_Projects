@@ -45,6 +45,15 @@
     <Compile Include="Data\RobotSensorData.cs" />
     <Compile Include="Data\RobotSensorDataStruct.cs" />
     <Compile Include="Data\RobotSensorHelper.cs" />
+    <Compile Include="Localization\RobotPath.cs" />
+    <Compile Include="Localization\RobotPathTimeItem.cs" />
+    <Compile Include="Localization\RobotPathTimeLine.cs" />
+    <Compile Include="MappingTimeline.cs" />
+    <Compile Include="NavigationTimeline.cs" />
+    <Compile Include="Navigation\NavigationPath.cs" />
+    <Compile Include="Navigation\Obstacle.cs" />
+    <Compile Include="Navigation\ObstacleItem.cs" />
+    <Compile Include="Navigation\ObstacleItemList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\RobotSensorDataList.cs" />
     <Compile Include="Data\RPLidarHelper.cs" />
@@ -56,6 +65,8 @@
     <Compile Include="TimelineBase.cs" />
     <Compile Include="TimelineItem.cs" />
     <Compile Include="TimelineItemList.cs" />
+    <Compile Include="TrajectoryTimeline.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

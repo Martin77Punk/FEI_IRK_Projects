@@ -270,7 +270,15 @@ namespace FEI.IRK.HM.RMR.Lib
 
             // OK
             ProcessingSuccess = true;
-            ProcessingErrors = String.Format("RPLidar súbor '{0}' úspešne nahraný!", Path.GetFileName(RPLidarMeasurementFile));
+            if (DoDeserialize)
+            {
+                ProcessingErrors = String.Format("RPLidar súbor '{0}' úspešne nahraný!", Path.GetFileName(RPLidarMeasurementFile));
+            }
+            else
+            {
+                ProcessingErrors = String.Format("Súbor '{0}' je platný súbor meraní RPLidar skenera!", Path.GetFileName(RPLidarMeasurementFile));
+            }
+            
             return RPLidarMeasurementData;
         }
 

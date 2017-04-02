@@ -6,8 +6,11 @@ using System.Windows.Forms;
 
 namespace FEI.IRK.HM.RMR.Lib
 {
-    class SubscribedComponents
+    public class SubscribedComponents
     {
+
+        #region Private variables
+
         private NumericUpDown robotDiameterNumericBox;
         private CheckBox showMapCheckBox;
         private NumericUpDown mapQuantisationNumBox;
@@ -22,13 +25,19 @@ namespace FEI.IRK.HM.RMR.Lib
         private ListBox sensorListBox;
         private TextBox lastScanTimeTextBox;
         private ListBox scanListBox;
-
+        private TextBox lastDataTimeTextBox;
+        private ListBox dataListBox;
+        private TextBox navigationText;
         private string timeFormat;
         private string distanceFormat;
 
+        #endregion
+
+
+        #region Public accessors
 
         /// <summary>
-        /// Winforms component with
+        /// Numeric Box component with Robot Diameter
         /// </summary>
         public NumericUpDown RobotDiameterNumericBox
         {
@@ -37,9 +46,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return robotDiameterNumericBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Check Box component with Show Map setting
+        /// </summary>
         public CheckBox ShowMapCheckBox
         {
             get
@@ -47,9 +57,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return showMapCheckBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Numeric Box component with Map Quantisation setting
+        /// </summary>
         public NumericUpDown MapQuantisationNumBox
         {
             get
@@ -57,9 +68,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return mapQuantisationNumBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Picture Box component for drawing
+        /// </summary>
         public PictureBox ImageBox
         {
             get
@@ -67,10 +79,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return imageBox;
             }
         }
-
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current Frame number
+        /// </summary>
         public TextBox FrameTextBox
         {
             get
@@ -78,9 +90,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return FrameTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current Elapsed Time
+        /// </summary>
         public TextBox SecondsTextBox
         {
             get
@@ -88,9 +101,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return secondsTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current X position coordinate of the robot
+        /// </summary>
         public TextBox PositionXTextBox
         {
             get
@@ -98,9 +112,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return positionXTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current Y position coordinate of the robot
+        /// </summary>
         public TextBox PositionYTextBox
         {
             get
@@ -108,9 +123,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return positionYTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current Angle of the robot
+        /// </summary>
         public TextBox AngleTextBox
         {
             get
@@ -118,9 +134,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return angleTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting current Velocity of the robot
+        /// </summary>
         public TextBox VelocityTextBox
         {
             get
@@ -128,9 +145,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return velocityTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting elapsed time from last sensor data
+        /// </summary>
         public TextBox LastSensorTimeTextBox
         {
             get
@@ -138,9 +156,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return lastSensorTimeTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// List Box component with populated Sensor data list
+        /// </summary>
         public ListBox SensorListBox
         {
             get
@@ -148,9 +167,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return sensorListBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// Text Box component for setting elapsed time from last laser scan data
+        /// </summary>
         public TextBox LastScanTimeTextBox
         {
             get
@@ -158,9 +178,10 @@ namespace FEI.IRK.HM.RMR.Lib
                 return lastScanTimeTextBox;
             }
         }
-
-
-
+        
+        /// <summary>
+        /// List Box component with populated Scan data list
+        /// </summary>
         public ListBox ScanListBox
         {
             get
@@ -169,8 +190,48 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
+        /// <summary>
+        /// Text Box component for setting elapsed time from last sensor/scan data
+        /// </summary>
+        public TextBox LastDataTimeTextBox
+        {
+            get
+            {
+                return lastDataTimeTextBox;
+            }
+        }
+
+        /// <summary>
+        /// List Box component where Sensor and Scan data list will be populated
+        /// </summary>
+        public ListBox DataListBox
+        {
+            get
+            {
+                return dataListBox;
+            }
+        }
+
+        /// <summary>
+        /// Text Box component for setting navigation text
+        /// </summary>
+        public TextBox NavigationText
+        {
+            get
+            {
+                return navigationText;
+            }
+        }
+
+        #endregion
 
 
+        #region Public functions
+
+        /// <summary>
+        /// Update Frame number in designated Windorms component
+        /// </summary>
+        /// <param name="FrameNo">Current Frame number</param>
         public void SetFrame(int FrameNo)
         {
             if (frameTextBox != null)
@@ -179,7 +240,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Time in designated Windorms component
+        /// </summary>
+        /// <param name="Seconds">Current time in seconds</param>
         public void SetSeconds(double Seconds)
         {
             if (secondsTextBox != null)
@@ -188,7 +252,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Robot's X position in designated Windorms component
+        /// </summary>
+        /// <param name="PositionX">Coordinate X of robot position</param>
         public void SetPositionX(double PositionX)
         {
             if (PositionXTextBox != null)
@@ -197,7 +264,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Robot's Y position in designated Windorms component
+        /// </summary>
+        /// <param name="PositionY">Coordinate Y of robot position</param>
         public void SetPositionY(double PositionY)
         {
             if (PositionYTextBox != null)
@@ -206,7 +276,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Robot's Velocity in designated Windorms component
+        /// </summary>
+        /// <param name="Velocity">Robot's Velocity value</param>
         public void SetVelocity(double Velocity)
         {
             if (VelocityTextBox != null)
@@ -215,7 +288,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Robot's Angle in designated Windorms component
+        /// </summary>
+        /// <param name="Angle">Robot's Angle value</param>
         public void SetAngle(double Angle)
         {
             if (AngleTextBox != null)
@@ -233,7 +309,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Last sensor time difference in designated Windorms component
+        /// </summary>
+        /// <param name="Seconds">Time in seconds where last robot's sensor data occured</param>
         public void SetLastSensorSeconds(double Seconds)
         {
             if (lastSensorTimeTextBox != null)
@@ -242,7 +321,10 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
-
+        /// <summary>
+        /// Update Last scan time difference in designated Windorms component
+        /// </summary>
+        /// <param name="Seconds">Time in seconds where last robot's scan data occured</param>
         public void SetLastScanSeconds(double Seconds)
         {
             if (lastScanTimeTextBox != null)
@@ -251,8 +333,58 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
+        /// <summary>
+        /// Update Last sensor/scan time difference in designated Windorms component
+        /// </summary>
+        /// <param name="Seconds">Time in seconds where last robot's sensor/scan data occured</param>
+        public void SetLastDataSeconds(double Seconds)
+        {
+            if (lastDataTimeTextBox != null)
+            {
+                lastDataTimeTextBox.Text = Seconds.ToString(timeFormat);
+            }
+        }
 
-        public SubscribedComponents(NumericUpDown RobotDiameterNumericBox, CheckBox ShowMapCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, string TimeFormat, string DistanceFormat)
+        /// <summary>
+        /// Update Navigation Hint text in designated Windorms component
+        /// </summary>
+        /// <param name="NavigationHint">Navigation Hint text</param>
+        public void SetNavigationHint(string NavigationHint)
+        {
+            if (navigationText != null)
+            {
+                navigationText.Text = NavigationHint;
+            }
+        }
+
+        #endregion
+
+
+        #region Constructor
+
+        /// <summary>
+        /// Initiate Subscribed Components class for maintaining data in subscribed Winforms components
+        /// </summary>
+        /// <param name="RobotDiameterNumericBox">Numeric Box component with Robot Diameter</param>
+        /// <param name="ShowMapCheckBox">Check Box component with Show Map setting</param>
+        /// <param name="MapQuantisationNumBox">Numeric Box component with Map Quantisation setting</param>
+        /// <param name="ImageBox">Picture Box component for drawing</param>
+        /// <param name="FrameTextBox">Text Box component for setting current Frame number</param>
+        /// <param name="SecondsTextBox">Text Box component for setting current Elapsed Time</param>
+        /// <param name="PositionXTextBox">Text Box component for setting current X position coordinate of the robot</param>
+        /// <param name="PositionYTextBox">Text Box component for setting current Y position coordinate of the robot</param>
+        /// <param name="AngleTextBox">Text Box component for setting current Angle of the robot</param>
+        /// <param name="VelocityTextBox">Text Box component for setting current Velocity of the robot</param>
+        /// <param name="LastSensorTimeTextBox">Text Box component for setting elapsed time from last sensor data</param>
+        /// <param name="SensorListBox">List Box component where Sensor data list will be populated</param>
+        /// <param name="LastScanTimeTextBox">Text Box component for setting elapsed time from last laser scan data</param>
+        /// <param name="ScanListBox">List Box component where Scan data list will be populated</param>
+        /// <param name="LastDataTimeTextBox">Text Box component for setting elapsed time from last sensor/scan data</param>
+        /// <param name="DataListBox">List Box component where Sensor and Scan data list will be populated</param>
+        /// <param name="NavigationText">Text Box component for setting navigation text</param>
+        /// <param name="TimeFormat">DOUBLE type format for serializing Time as String</param>
+        /// <param name="DistanceFormat">DOUBLE type format for serializing Distance/Position as String</param>
+        public SubscribedComponents(NumericUpDown RobotDiameterNumericBox, CheckBox ShowMapCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, TextBox LastDataTimeTextBox, ListBox DataListBox, TextBox NavigationText, string TimeFormat, string DistanceFormat)
         {
             this.robotDiameterNumericBox = RobotDiameterNumericBox;
             this.showMapCheckBox = ShowMapCheckBox;
@@ -268,10 +400,14 @@ namespace FEI.IRK.HM.RMR.Lib
             this.sensorListBox = SensorListBox;
             this.lastScanTimeTextBox = LastScanTimeTextBox;
             this.scanListBox = ScanListBox;
-
+            this.lastDataTimeTextBox = LastDataTimeTextBox;
+            this.dataListBox = DataListBox;
+            this.navigationText = NavigationText;
             this.timeFormat = TimeFormat;
             this.distanceFormat = DistanceFormat;
         }
+
+        #endregion
 
     }
 }
