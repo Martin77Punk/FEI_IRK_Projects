@@ -56,6 +56,7 @@
             this.Task1ImageBox = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupTask2 = new System.Windows.Forms.GroupBox();
+            this.Task2NavigationText = new System.Windows.Forms.TextBox();
             this.Task2ButtonCancel = new System.Windows.Forms.Button();
             this.Task2ButtonNavigate = new System.Windows.Forms.Button();
             this.Task2ScanListBox = new System.Windows.Forms.ListBox();
@@ -135,7 +136,11 @@
             this.lblTask4Quant = new System.Windows.Forms.Label();
             this.TimeNumericBox = new System.Windows.Forms.NumericUpDown();
             this.PlayerTimer = new System.Windows.Forms.Timer(this.components);
-            this.Task2NavigationText = new System.Windows.Forms.TextBox();
+            this.DisplayRobotTrackCheckBox = new System.Windows.Forms.CheckBox();
+            this.groupTaskSet2 = new System.Windows.Forms.GroupBox();
+            this.lblTask2Detour = new System.Windows.Forms.Label();
+            this.TangentBugDetourNumericBox = new System.Windows.Forms.NumericUpDown();
+            this.lblTask2Mm = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupTask1.SuspendLayout();
@@ -156,6 +161,8 @@
             this.groupTaskSet4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MapQuantisationNumBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TimeNumericBox)).BeginInit();
+            this.groupTaskSet2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TangentBugDetourNumericBox)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -461,6 +468,17 @@
             this.groupTask2.TabIndex = 3;
             this.groupTask2.TabStop = false;
             this.groupTask2.Text = "Úloha 2: Navigácia";
+            // 
+            // Task2NavigationText
+            // 
+            this.Task2NavigationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Task2NavigationText.Location = new System.Drawing.Point(6, 363);
+            this.Task2NavigationText.Multiline = true;
+            this.Task2NavigationText.Name = "Task2NavigationText";
+            this.Task2NavigationText.ReadOnly = true;
+            this.Task2NavigationText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.Task2NavigationText.Size = new System.Drawing.Size(364, 123);
+            this.Task2NavigationText.TabIndex = 27;
             // 
             // Task2ButtonCancel
             // 
@@ -1182,7 +1200,7 @@
             this.groupTaskSetAll.Controls.Add(this.lblTaskAllAverage);
             this.groupTaskSetAll.Location = new System.Drawing.Point(12, 593);
             this.groupTaskSetAll.Name = "groupTaskSetAll";
-            this.groupTaskSetAll.Size = new System.Drawing.Size(220, 66);
+            this.groupTaskSetAll.Size = new System.Drawing.Size(170, 66);
             this.groupTaskSetAll.TabIndex = 9;
             this.groupTaskSetAll.TabStop = false;
             this.groupTaskSetAll.Text = "Všetky úlohy";
@@ -1190,7 +1208,7 @@
             // lblTaskAllMm
             // 
             this.lblTaskAllMm.AutoSize = true;
-            this.lblTaskAllMm.Location = new System.Drawing.Point(163, 28);
+            this.lblTaskAllMm.Location = new System.Drawing.Point(146, 28);
             this.lblTaskAllMm.Name = "lblTaskAllMm";
             this.lblTaskAllMm.Size = new System.Drawing.Size(23, 13);
             this.lblTaskAllMm.TabIndex = 2;
@@ -1198,7 +1216,7 @@
             // 
             // RobotDiameterNumericBox
             // 
-            this.RobotDiameterNumericBox.Location = new System.Drawing.Point(107, 26);
+            this.RobotDiameterNumericBox.Location = new System.Drawing.Point(90, 26);
             this.RobotDiameterNumericBox.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1221,7 +1239,7 @@
             // lblTaskAllAverage
             // 
             this.lblTaskAllAverage.AutoSize = true;
-            this.lblTaskAllAverage.Location = new System.Drawing.Point(23, 30);
+            this.lblTaskAllAverage.Location = new System.Drawing.Point(6, 30);
             this.lblTaskAllAverage.Name = "lblTaskAllAverage";
             this.lblTaskAllAverage.Size = new System.Drawing.Size(78, 13);
             this.lblTaskAllAverage.TabIndex = 0;
@@ -1230,10 +1248,11 @@
             // groupTaskSet3
             // 
             this.groupTaskSet3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupTaskSet3.Controls.Add(this.DisplayRobotTrackCheckBox);
             this.groupTaskSet3.Controls.Add(this.ShowMapCheckBox);
-            this.groupTaskSet3.Location = new System.Drawing.Point(238, 593);
+            this.groupTaskSet3.Location = new System.Drawing.Point(363, 593);
             this.groupTaskSet3.Name = "groupTaskSet3";
-            this.groupTaskSet3.Size = new System.Drawing.Size(220, 66);
+            this.groupTaskSet3.Size = new System.Drawing.Size(170, 66);
             this.groupTaskSet3.TabIndex = 10;
             this.groupTaskSet3.TabStop = false;
             this.groupTaskSet3.Text = "Úloha 3: Mapovanie";
@@ -1241,7 +1260,7 @@
             // ShowMapCheckBox
             // 
             this.ShowMapCheckBox.AutoSize = true;
-            this.ShowMapCheckBox.Location = new System.Drawing.Point(53, 27);
+            this.ShowMapCheckBox.Location = new System.Drawing.Point(6, 19);
             this.ShowMapCheckBox.Name = "ShowMapCheckBox";
             this.ShowMapCheckBox.Size = new System.Drawing.Size(117, 17);
             this.ShowMapCheckBox.TabIndex = 0;
@@ -1254,9 +1273,9 @@
             this.groupTaskSet4.Controls.Add(this.lblTask4Mm);
             this.groupTaskSet4.Controls.Add(this.MapQuantisationNumBox);
             this.groupTaskSet4.Controls.Add(this.lblTask4Quant);
-            this.groupTaskSet4.Location = new System.Drawing.Point(464, 593);
+            this.groupTaskSet4.Location = new System.Drawing.Point(539, 593);
             this.groupTaskSet4.Name = "groupTaskSet4";
-            this.groupTaskSet4.Size = new System.Drawing.Size(220, 66);
+            this.groupTaskSet4.Size = new System.Drawing.Size(170, 66);
             this.groupTaskSet4.TabIndex = 11;
             this.groupTaskSet4.TabStop = false;
             this.groupTaskSet4.Text = "Úloha 4: Plánovanie trajektórie";
@@ -1264,7 +1283,7 @@
             // lblTask4Mm
             // 
             this.lblTask4Mm.AutoSize = true;
-            this.lblTask4Mm.Location = new System.Drawing.Point(159, 28);
+            this.lblTask4Mm.Location = new System.Drawing.Point(133, 30);
             this.lblTask4Mm.Name = "lblTask4Mm";
             this.lblTask4Mm.Size = new System.Drawing.Size(23, 13);
             this.lblTask4Mm.TabIndex = 2;
@@ -1272,7 +1291,7 @@
             // 
             // MapQuantisationNumBox
             // 
-            this.MapQuantisationNumBox.Location = new System.Drawing.Point(95, 26);
+            this.MapQuantisationNumBox.Location = new System.Drawing.Point(77, 28);
             this.MapQuantisationNumBox.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1284,7 +1303,7 @@
             0,
             0});
             this.MapQuantisationNumBox.Name = "MapQuantisationNumBox";
-            this.MapQuantisationNumBox.Size = new System.Drawing.Size(58, 20);
+            this.MapQuantisationNumBox.Size = new System.Drawing.Size(50, 20);
             this.MapQuantisationNumBox.TabIndex = 1;
             this.MapQuantisationNumBox.Value = new decimal(new int[] {
             15,
@@ -1295,7 +1314,7 @@
             // lblTask4Quant
             // 
             this.lblTask4Quant.AutoSize = true;
-            this.lblTask4Quant.Location = new System.Drawing.Point(24, 28);
+            this.lblTask4Quant.Location = new System.Drawing.Point(6, 30);
             this.lblTask4Quant.Name = "lblTask4Quant";
             this.lblTask4Quant.Size = new System.Drawing.Size(65, 13);
             this.lblTask4Quant.TabIndex = 0;
@@ -1327,22 +1346,80 @@
             // 
             this.PlayerTimer.Tick += new System.EventHandler(this.PlayerTimer_Tick);
             // 
-            // Task2NavigationText
+            // DisplayRobotTrackCheckBox
             // 
-            this.Task2NavigationText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Task2NavigationText.Location = new System.Drawing.Point(6, 363);
-            this.Task2NavigationText.Multiline = true;
-            this.Task2NavigationText.Name = "Task2NavigationText";
-            this.Task2NavigationText.ReadOnly = true;
-            this.Task2NavigationText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Task2NavigationText.Size = new System.Drawing.Size(364, 123);
-            this.Task2NavigationText.TabIndex = 27;
+            this.DisplayRobotTrackCheckBox.AutoSize = true;
+            this.DisplayRobotTrackCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.DisplayRobotTrackCheckBox.Name = "DisplayRobotTrackCheckBox";
+            this.DisplayRobotTrackCheckBox.Size = new System.Drawing.Size(138, 17);
+            this.DisplayRobotTrackCheckBox.TabIndex = 1;
+            this.DisplayRobotTrackCheckBox.Text = "Zobraziť prejdenú cestu";
+            this.DisplayRobotTrackCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // groupTaskSet2
+            // 
+            this.groupTaskSet2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupTaskSet2.Controls.Add(this.lblTask2Mm);
+            this.groupTaskSet2.Controls.Add(this.TangentBugDetourNumericBox);
+            this.groupTaskSet2.Controls.Add(this.lblTask2Detour);
+            this.groupTaskSet2.Location = new System.Drawing.Point(187, 593);
+            this.groupTaskSet2.Name = "groupTaskSet2";
+            this.groupTaskSet2.Size = new System.Drawing.Size(170, 66);
+            this.groupTaskSet2.TabIndex = 13;
+            this.groupTaskSet2.TabStop = false;
+            this.groupTaskSet2.Text = "Úloha 2: Navigácia";
+            // 
+            // lblTask2Detour
+            // 
+            this.lblTask2Detour.AutoSize = true;
+            this.lblTask2Detour.Location = new System.Drawing.Point(6, 30);
+            this.lblTask2Detour.Name = "lblTask2Detour";
+            this.lblTask2Detour.Size = new System.Drawing.Size(65, 13);
+            this.lblTask2Detour.TabIndex = 0;
+            this.lblTask2Detour.Text = "Obchádzka:";
+            // 
+            // TangentBugDetourNumericBox
+            // 
+            this.TangentBugDetourNumericBox.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.TangentBugDetourNumericBox.Location = new System.Drawing.Point(77, 28);
+            this.TangentBugDetourNumericBox.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.TangentBugDetourNumericBox.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.TangentBugDetourNumericBox.Name = "TangentBugDetourNumericBox";
+            this.TangentBugDetourNumericBox.Size = new System.Drawing.Size(50, 20);
+            this.TangentBugDetourNumericBox.TabIndex = 1;
+            this.TangentBugDetourNumericBox.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // lblTask2Mm
+            // 
+            this.lblTask2Mm.AutoSize = true;
+            this.lblTask2Mm.Location = new System.Drawing.Point(133, 30);
+            this.lblTask2Mm.Name = "lblTask2Mm";
+            this.lblTask2Mm.Size = new System.Drawing.Size(23, 13);
+            this.lblTask2Mm.TabIndex = 2;
+            this.lblTask2Mm.Text = "mm";
             // 
             // ShowtimeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 671);
+            this.Controls.Add(this.groupTaskSet2);
             this.Controls.Add(this.TimeNumericBox);
             this.Controls.Add(this.groupTaskSet4);
             this.Controls.Add(this.groupTaskSet3);
@@ -1388,6 +1465,9 @@
             this.groupTaskSet4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MapQuantisationNumBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TimeNumericBox)).EndInit();
+            this.groupTaskSet2.ResumeLayout(false);
+            this.groupTaskSet2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TangentBugDetourNumericBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1502,5 +1582,10 @@
         private System.Windows.Forms.Button Task4ButtonTrajectory;
         private System.Windows.Forms.Label lblTask3LastDataMm;
         private System.Windows.Forms.TextBox Task2NavigationText;
+        private System.Windows.Forms.CheckBox DisplayRobotTrackCheckBox;
+        private System.Windows.Forms.GroupBox groupTaskSet2;
+        private System.Windows.Forms.Label lblTask2Mm;
+        private System.Windows.Forms.NumericUpDown TangentBugDetourNumericBox;
+        private System.Windows.Forms.Label lblTask2Detour;
     }
 }

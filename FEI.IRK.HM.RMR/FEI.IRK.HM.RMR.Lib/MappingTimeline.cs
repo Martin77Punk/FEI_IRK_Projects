@@ -14,6 +14,7 @@ namespace FEI.IRK.HM.RMR.Lib
 
         private Color ColorBackground = Color.AliceBlue;
         private Pen PenRobot = new Pen(Color.DarkSlateBlue, 1);
+        private Pen PenRobotTrack = new Pen(Color.OrangeRed, 1);
         private Brush BrushRobot = Brushes.DarkSlateBlue;
         private Brush BrushObstacle = Brushes.DarkOliveGreen;
 
@@ -24,6 +25,7 @@ namespace FEI.IRK.HM.RMR.Lib
         private double MaxCoordY = 0;
 
         private ObstacleItemList ObstacleList;
+        private RobotPathTimeLine PathTimeLine;
 
         #endregion
 
@@ -42,6 +44,7 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="ScanData">RPLidar Laser scanner data</param>
         public MappingTimeline(RobotSensorDataList SensorData, RPLidarMeasurementList ScanData) : base(SensorData, ScanData)
         {
+            PathTimeLine = new RobotPathTimeLine(TimelineItems);
             ObstacleList = new ObstacleItemList(TimelineItems, true);
             SetDrawingBounds();
         }
@@ -50,6 +53,31 @@ namespace FEI.IRK.HM.RMR.Lib
 
 
         #region Private paint functions
+
+        /// <summary>
+        /// Function indicating that the contents of the image was changed and whether to invalidate PictureBox
+        /// </summary>
+        /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
+        protected override Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo)
+        {
+            // Invalidate in case of different PosX, PosY, Phi, LastScanTime
+            double PrevX = TimelineItems[PreviousFrameNo].PositionX;
+            double PrevY = TimelineItems[PreviousFrameNo].PositionY;
+            double PrevPhi = TimelineItems[PreviousFrameNo].Phi;
+            double PrevScanTime = TimelineItems.GetLastItemTimeWithScanData(PreviousFrameNo);
+            double NewX = TimelineItems[NewFrameNo].PositionX;
+            double NewY = TimelineItems[NewFrameNo].PositionY;
+            double NewPhi = TimelineItems[NewFrameNo].Phi;
+            double NewScanTime = TimelineItems.GetLastItemTimeWithScanData(NewFrameNo);
+            if (PrevX != NewX || PrevY != NewY || PrevPhi != NewPhi || PrevScanTime != NewScanTime)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Function for painting on the PictureBox
@@ -85,6 +113,17 @@ namespace FEI.IRK.HM.RMR.Lib
                     foreach (Obstacle SingleObstacle in ObstacleList[FrameNo].Obstacles)
                     {
                         g.FillRectangle(BrushObstacle, TransformX(SingleObstacle.PositionX), TransformY(SingleObstacle.PositionY), 1, 1);
+                    }
+                }
+            }
+            // Paint Path
+            if (ShowRobotTrack)
+            {
+                if (PathTimeLine[FrameNo].Paths != null)
+                {
+                    foreach (RobotPath SinglePath in PathTimeLine[FrameNo].Paths)
+                    {
+                        g.DrawLine(PenRobotTrack, TransformX(SinglePath.Position1.PositionX), TransformY(SinglePath.Position1.PositionY), TransformX(SinglePath.Position2.PositionX), TransformY(SinglePath.Position2.PositionY));
                     }
                 }
             }            
@@ -187,8 +226,6 @@ namespace FEI.IRK.HM.RMR.Lib
 
 
         #endregion
-
-
-
+        
     }
 }

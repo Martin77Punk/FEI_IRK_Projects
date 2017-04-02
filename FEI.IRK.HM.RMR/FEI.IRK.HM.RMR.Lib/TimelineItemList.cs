@@ -53,11 +53,7 @@ namespace FEI.IRK.HM.RMR.Lib
         public double GetLastItemTimeWithSensorData(int CurrentFrame)
         {
             TimelineItem LastSensorReading = null;
-            try
-            {
-                LastSensorReading = this.Last(TLItem => TLItem.SensorData != null && TLItem.FrameNo <= CurrentFrame);
-            }
-            catch (Exception) { }
+            LastSensorReading = (this.Count(TLItem => TLItem.SensorData != null && TLItem.FrameNo <= CurrentFrame) > 0) ? this.Last(TLItem => TLItem.SensorData != null && TLItem.FrameNo <= CurrentFrame) : null;
             if (LastSensorReading == null)
                 return 0;
             else
@@ -72,11 +68,7 @@ namespace FEI.IRK.HM.RMR.Lib
         public double GetLastItemTimeWithScanData(int CurrentFrame)
         {
             TimelineItem LastScanReading = null;
-            try
-            {
-                LastScanReading = this.Last(TLItem => TLItem.LaserScans != null && TLItem.FrameNo <= CurrentFrame);
-            }
-            catch (Exception) { }
+            LastScanReading = (this.Count(TLItem => TLItem.LaserScans != null && TLItem.FrameNo <= CurrentFrame) > 0) ? this.Last(TLItem => TLItem.LaserScans != null && TLItem.FrameNo <= CurrentFrame) : null;
             if (LastScanReading == null)
                 return 0;
             else
@@ -91,11 +83,7 @@ namespace FEI.IRK.HM.RMR.Lib
         public double GetLastItemTimeWithAnyData(int CurrentFrame)
         {
             TimelineItem LastData = null;
-            try
-            {
-                LastData = this.Last(TLItem => (TLItem.SensorData != null || TLItem.LaserScans != null) && TLItem.FrameNo <= CurrentFrame);
-            }
-            catch (Exception) { }
+            LastData = (this.Count(TLItem => (TLItem.SensorData != null || TLItem.LaserScans != null) && TLItem.FrameNo <= CurrentFrame) > 0) ? this.Last(TLItem => (TLItem.SensorData != null || TLItem.LaserScans != null) && TLItem.FrameNo <= CurrentFrame) : null;
             if (LastData == null)
                 return 0;
             else

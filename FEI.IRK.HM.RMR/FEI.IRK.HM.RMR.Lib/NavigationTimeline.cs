@@ -30,7 +30,6 @@ namespace FEI.IRK.HM.RMR.Lib
         private Boolean NavigateClicked = false;
         private double NavigateToX = 0;
         private double NavigateToY = 0;
-        private double NavigationDetourDistance = 100;
         private List<NavigationPath> NavigationList;
 
         #endregion
@@ -164,7 +163,7 @@ namespace FEI.IRK.HM.RMR.Lib
             // Add initial item
             NavigationList.Add(StartPosition);
             // Add first tangent
-            NavigationPath NextPath = GetBestTangetToDestination(NavigationList.Last(), DestinationPosition);
+            NavigationPath NextPath = GetBestTangentToDestination(NavigationList.Last(), DestinationPosition);
             RemainingDistance = GetRemainingDistance(NextPath);
             NavigationList.Add(NextPath);
             while (RemainingDistance != 0)
@@ -179,7 +178,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     // Detour obstacle
                     NavigationPath ObstacleDetour = FindObstacleDetour(NavigationList.Last(), DestinationPosition);
                     if (ObstacleDetour == null) break;
-                    NextPath = GetBestTangetToDestination(ObstacleDetour, DestinationPosition);
+                    NextPath = GetBestTangentToDestination(ObstacleDetour, DestinationPosition);
                     DistanceFromDetour = GetRemainingDistance(NextPath);
                     if ((RemainingDistance - DistanceFromDetour) < 1)
                     {
@@ -201,7 +200,7 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="MyPosition">Starting position</param>
         /// <param name="Destination">Destination position</param>
         /// <returns>Best possible navigation using tangent line to destination</returns>
-        private NavigationPath GetBestTangetToDestination(NavigationPath MyPosition, NavigationPath Destination)
+        private NavigationPath GetBestTangentToDestination(NavigationPath MyPosition, NavigationPath Destination)
         {
             Obstacle[] CurrentObstacles = ObstacleList[CurrentFrameNumber].Obstacles;
             double RobotRadius = ((double)RobotDiameter) / 2;
@@ -263,7 +262,7 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="Angle">Angle in which direction to draw tangent line</param>
         /// <param name="MaxDistance">Maximum distance of tangent line</param>
         /// <returns>Best possible navigation using tangent line to point described by angle and maximum distance</returns>
-        private NavigationPath GetMaxTangetByAngleAndDistance(NavigationPath MyPosition, double Angle, double MaxDistance)
+        private NavigationPath GetMaxTangentByAngleAndDistance(NavigationPath MyPosition, double Angle, double MaxDistance)
         {
             Obstacle[] CurrentObstacles = ObstacleList[CurrentFrameNumber].Obstacles;
             double RobotRadius = ((double)RobotDiameter) / 2;
@@ -305,6 +304,7 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <returns>Navigation to best possible detour</returns>
         private NavigationPath FindObstacleDetour(NavigationPath MyPosition, NavigationPath Destination)
         {
+            double DetourDistance = (double)TangentBugDetour;
             double CurrentDistance = GetRemainingDistance(MyPosition);
             NavigationPath[] Detours = new NavigationPath[360];
             double[] DetourDistances = new double[360];
@@ -314,9 +314,9 @@ namespace FEI.IRK.HM.RMR.Lib
             NavigationPath BestDetour = null;
             for (int Angle = 0; Angle < 360; Angle++)
             {
-                Detours[Angle] = GetMaxTangetByAngleAndDistance(MyPosition, Angle, NavigationDetourDistance);
+                Detours[Angle] = GetMaxTangentByAngleAndDistance(MyPosition, Angle, DetourDistance);
                 DetourDistances[Angle] = GetRemainingDistance(Detours[Angle]);
-                DetouredTangents[Angle] = GetBestTangetToDestination(Detours[Angle], Destination);
+                DetouredTangents[Angle] = GetBestTangentToDestination(Detours[Angle], Destination);
                 DetouredDistances[Angle] = GetRemainingDistance(DetouredTangents[Angle]);
                 if (DetouredDistances[Angle] < BestDetourDistance)
                 {
@@ -344,6 +344,25 @@ namespace FEI.IRK.HM.RMR.Lib
 
 
         #region Private paint functions
+
+        /// <summary>
+        /// Function indicating that the contents of the image was changed and whether to invalidate PictureBox
+        /// </summary>
+        /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
+        protected override Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo)
+        {
+            // Invalidate only in case these frames belongs to different scanner readings
+            double PrevScanTime = TimelineItems.GetLastItemTimeWithScanData(PreviousFrameNo);
+            double NewScanTime = TimelineItems.GetLastItemTimeWithScanData(NewFrameNo);
+            if (PrevScanTime != NewScanTime)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Function for painting on the PictureBox

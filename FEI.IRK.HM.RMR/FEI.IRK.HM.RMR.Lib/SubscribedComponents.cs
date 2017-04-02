@@ -12,7 +12,9 @@ namespace FEI.IRK.HM.RMR.Lib
         #region Private variables
 
         private NumericUpDown robotDiameterNumericBox;
+        private NumericUpDown tangentBugDetourNumericBox;
         private CheckBox showMapCheckBox;
+        private CheckBox displayRobotTrackCheckBox;
         private NumericUpDown mapQuantisationNumBox;
         private PictureBox imageBox;
         private TextBox frameTextBox;
@@ -46,7 +48,18 @@ namespace FEI.IRK.HM.RMR.Lib
                 return robotDiameterNumericBox;
             }
         }
-        
+
+        /// <summary>
+        /// Numeric Box component with Detour length for Tangent bug algoritm
+        /// </summary>
+        public NumericUpDown TangentBugDetourNumericBox
+        {
+            get
+            {
+                return tangentBugDetourNumericBox;
+            }
+        }
+
         /// <summary>
         /// Check Box component with Show Map setting
         /// </summary>
@@ -57,7 +70,18 @@ namespace FEI.IRK.HM.RMR.Lib
                 return showMapCheckBox;
             }
         }
-        
+
+        /// <summary>
+        /// Check Box component with Display Robot track setting
+        /// </summary>
+        public CheckBox DisplayRobotTrackCheckBox
+        {
+            get
+            {
+                return displayRobotTrackCheckBox;
+            }
+        }
+
         /// <summary>
         /// Numeric Box component with Map Quantisation setting
         /// </summary>
@@ -366,7 +390,9 @@ namespace FEI.IRK.HM.RMR.Lib
         /// Initiate Subscribed Components class for maintaining data in subscribed Winforms components
         /// </summary>
         /// <param name="RobotDiameterNumericBox">Numeric Box component with Robot Diameter</param>
+        /// <param name="TangentBugDetourNumericBox">Numeric Box component with Detour length for Tangent bug algoritm</param>
         /// <param name="ShowMapCheckBox">Check Box component with Show Map setting</param>
+        /// <param name="DisplayRobotTrackCheckBox">Check Box component with Display Robot track setting</param>
         /// <param name="MapQuantisationNumBox">Numeric Box component with Map Quantisation setting</param>
         /// <param name="ImageBox">Picture Box component for drawing</param>
         /// <param name="FrameTextBox">Text Box component for setting current Frame number</param>
@@ -384,10 +410,12 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="NavigationText">Text Box component for setting navigation text</param>
         /// <param name="TimeFormat">DOUBLE type format for serializing Time as String</param>
         /// <param name="DistanceFormat">DOUBLE type format for serializing Distance/Position as String</param>
-        public SubscribedComponents(NumericUpDown RobotDiameterNumericBox, CheckBox ShowMapCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, TextBox LastDataTimeTextBox, ListBox DataListBox, TextBox NavigationText, string TimeFormat, string DistanceFormat)
+        public SubscribedComponents(NumericUpDown RobotDiameterNumericBox, NumericUpDown TangentBugDetourNumericBox, CheckBox ShowMapCheckBox, CheckBox DisplayRobotTrackCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, TextBox LastDataTimeTextBox, ListBox DataListBox, TextBox NavigationText, string TimeFormat, string DistanceFormat)
         {
             this.robotDiameterNumericBox = RobotDiameterNumericBox;
+            this.tangentBugDetourNumericBox = TangentBugDetourNumericBox;
             this.showMapCheckBox = ShowMapCheckBox;
+            this.displayRobotTrackCheckBox = DisplayRobotTrackCheckBox;
             this.mapQuantisationNumBox = MapQuantisationNumBox;
             this.imageBox = ImageBox;
             this.frameTextBox = FrameTextBox;

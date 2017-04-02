@@ -15,12 +15,17 @@ namespace FEI.IRK.HM.RMR.App
 
         // SETTING Constants:
         private readonly decimal RobotDiameterMin = 150;
-        private readonly decimal RobotDiameterMax = 250;
+        private readonly decimal RobotDiameterMax = 400;
         private readonly decimal RobotDiameterDef = 200;
+        private readonly decimal TangentBugDetourMin = 100;
+        private readonly decimal TangentBugDetourMax = 5000;
+        private readonly decimal TangentBugDetourDef = 300;
+        private readonly decimal TangentBugDetourInc = 10;
         private readonly Boolean MapShowAll = false;
-        private readonly decimal MapQuantisationMin = 5;
-        private readonly decimal MapQuantisationMax = 50;
-        private readonly decimal MapQuantisationDef = 10;
+        private readonly Boolean MapDisplayTrack = false;
+        private readonly decimal MapQuantisationMin = 50;
+        private readonly decimal MapQuantisationMax = 200;
+        private readonly decimal MapQuantisationDef = 100;
 
         // Local Private variables
         private Boolean DataSuccesfullyLoaded = false;
@@ -98,8 +103,17 @@ namespace FEI.IRK.HM.RMR.App
             RobotDiameterNumericBox.Maximum = RobotDiameterMax;
             RobotDiameterNumericBox.Value = RobotDiameterDef;
 
+            // Initialize Form Components: TangentBugDetourNumericBox
+            TangentBugDetourNumericBox.Minimum = TangentBugDetourMin;
+            TangentBugDetourNumericBox.Maximum = TangentBugDetourMax;
+            TangentBugDetourNumericBox.Value = TangentBugDetourDef;
+            TangentBugDetourNumericBox.Increment = TangentBugDetourInc;
+
             // Initialize Form Components: ShowMapCheckBox
             ShowMapCheckBox.Checked = MapShowAll;
+
+            // Initialize Form Components: DisplayRobotTrackCheckBox
+            DisplayRobotTrackCheckBox.Checked = MapDisplayTrack;
 
             // Initialize Form Components: MapQuantisationNumBox
             MapQuantisationNumBox.Minimum = MapQuantisationMin;
@@ -122,15 +136,15 @@ namespace FEI.IRK.HM.RMR.App
         {
             // Initialize LocalizationTimeline
             TimelineLocalization = new LocalizationTimeline(SensorData, ScanData);
-            TimelineLocalization.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task1ImageBox, Task1FrameTextBox, Task1TimeTextBox, Task1PosXTextBox, Task1PosYTextBox, Task1AngleTextBox, Task1VelocityTextBox, Task1LastSensorTextBox, Task1SensorListBox, null, null, null, null, null);
+            TimelineLocalization.SubscribeComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, Task1ImageBox, Task1FrameTextBox, Task1TimeTextBox, Task1PosXTextBox, Task1PosYTextBox, Task1AngleTextBox, Task1VelocityTextBox, Task1LastSensorTextBox, Task1SensorListBox, null, null, null, null, null);
 
             // Initialize NavigationTimeline
             TimelineNavigation = new NavigationTimeline(SensorData, ScanData);
-            TimelineNavigation.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task2ImageBox, Task2FrameTextBox, Task2TimeTextBox, null, null, null, null, null, null, Task2LastScanTextBox, Task2ScanListBox, null, null, Task2NavigationText);
+            TimelineNavigation.SubscribeComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, Task2ImageBox, Task2FrameTextBox, Task2TimeTextBox, null, null, null, null, null, null, Task2LastScanTextBox, Task2ScanListBox, null, null, Task2NavigationText);
 
             // Initialize MappingTimeline
             TimelineMapping = new MappingTimeline(SensorData, ScanData);
-            TimelineMapping.SubscribeComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, Task3ImageBox, Task3FrameTextBox, Task3TimeTextBox, Task3PosXTextBox, Task3PosYTextBox, Task3AngleTextBox, Task3VelocityTextBox, null, null, null, null, Task3LastDataTextBox, Task3DataListBox, null);
+            TimelineMapping.SubscribeComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, Task3ImageBox, Task3FrameTextBox, Task3TimeTextBox, Task3PosXTextBox, Task3PosYTextBox, Task3AngleTextBox, Task3VelocityTextBox, null, null, null, null, Task3LastDataTextBox, Task3DataListBox, null);
 
         }
 

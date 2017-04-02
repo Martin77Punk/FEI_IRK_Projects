@@ -49,6 +49,15 @@ namespace FEI.IRK.HM.RMR.Lib
         #region Private paint functions
 
         /// <summary>
+        /// Function indicating that the contents of the image was changed and whether to invalidate PictureBox
+        /// </summary>
+        /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
+        protected override Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Function for painting on the PictureBox
         /// </summary>
         /// <param name="FrameNo">Number of the frame to paint</param>

@@ -54,6 +54,29 @@ namespace FEI.IRK.HM.RMR.Lib
         #region Private Paint functions
 
         /// <summary>
+        /// Function indicating that the contents of the image was changed and whether to invalidate PictureBox
+        /// </summary>
+        /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
+        protected override Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo)
+        {
+            // Invalidate in case of different PosX, PosY, Phi
+            double PrevX = TimelineItems[PreviousFrameNo].PositionX;
+            double PrevY = TimelineItems[PreviousFrameNo].PositionY;
+            double PrevPhi = TimelineItems[PreviousFrameNo].Phi;
+            double NewX = TimelineItems[NewFrameNo].PositionX;
+            double NewY = TimelineItems[NewFrameNo].PositionY;
+            double NewPhi = TimelineItems[NewFrameNo].Phi;
+            if (PrevX != NewX || PrevY != NewY || PrevPhi != NewPhi)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Function for painting on the PictureBox
         /// </summary>
         /// <param name="FrameNo">Number of the frame to paint</param>

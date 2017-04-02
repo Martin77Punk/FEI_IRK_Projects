@@ -91,7 +91,27 @@ namespace FEI.IRK.HM.RMR.Lib
             }
         }
 
+        /// <summary>
+        /// Detour length for Tangent Bug algoritm
+        /// </summary>
+        protected decimal TangentBugDetour
+        {
+            get
+            {
+                if (WinFormComponents != null && WinFormComponents.TangentBugDetourNumericBox != null)
+                {
+                    return WinFormComponents.TangentBugDetourNumericBox.Value;
+                } 
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
+        /// <summary>
+        /// If TRUE display Whole map with all obstacles
+        /// </summary>
         protected Boolean WholeObstacleMap
         {
             get
@@ -103,6 +123,42 @@ namespace FEI.IRK.HM.RMR.Lib
                 else
                 {
                     return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// If TRUE display robot track
+        /// </summary>
+        protected Boolean ShowRobotTrack
+        {
+            get
+            {
+                if (WinFormComponents != null && WinFormComponents.DisplayRobotTrackCheckBox != null)
+                {
+                    return WinFormComponents.DisplayRobotTrackCheckBox.Checked;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Map quantisation rate for flood algoritm
+        /// </summary>
+        protected decimal MapQuantisationRate
+        {
+            get
+            {
+                if (WinFormComponents != null && WinFormComponents.MapQuantisationNumBox != null)
+                {
+                    return WinFormComponents.MapQuantisationNumBox.Value;
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
@@ -278,13 +334,14 @@ namespace FEI.IRK.HM.RMR.Lib
 
 
         #region Public functions
-
-
+        
         /// <summary>
         /// Subscribe Winforms application's components to Timeline
         /// </summary>
         /// <param name="RobotDiameterNumericBox">Numeric Box component with Robot Diameter</param>
+        /// <param name="TangentBugDetourNumericBox">Numeric Box component with Detour length for Tangent bug algoritm</param>
         /// <param name="ShowMapCheckBox">Check Box component with Show Map setting</param>
+        /// <param name="DisplayRobotTrackCheckBox">Check Box component with Display Robot track setting</param>
         /// <param name="MapQuantisationNumBox">Numeric Box component with Map Quantisation setting</param>
         /// <param name="ImageBox">Picture Box component for drawing</param>
         /// <param name="FrameTextBox">Text Box component for setting current Frame number</param>
@@ -300,10 +357,10 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="LastDataTimeTextBox">Text Box component for setting elapsed time from last sensor/scan data</param>
         /// <param name="DataListBox">List Box component where Sensor and Scan data list will be populated</param>
         /// <param name="NavigationText">Text Box component for setting navigation text</param>
-        public void SubscribeComponents(NumericUpDown RobotDiameterNumericBox, CheckBox ShowMapCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, TextBox LastDataTimeTextBox, ListBox DataListBox, TextBox NavigationText)
+        public void SubscribeComponents(NumericUpDown RobotDiameterNumericBox, NumericUpDown TangentBugDetourNumericBox, CheckBox ShowMapCheckBox, CheckBox DisplayRobotTrackCheckBox, NumericUpDown MapQuantisationNumBox, PictureBox ImageBox, TextBox FrameTextBox, TextBox SecondsTextBox, TextBox PositionXTextBox, TextBox PositionYTextBox, TextBox AngleTextBox, TextBox VelocityTextBox, TextBox LastSensorTimeTextBox, ListBox SensorListBox, TextBox LastScanTimeTextBox, ListBox ScanListBox, TextBox LastDataTimeTextBox, ListBox DataListBox, TextBox NavigationText)
         {
             // Save subscribed components into local variable
-            WinFormComponents = new SubscribedComponents(RobotDiameterNumericBox, ShowMapCheckBox, MapQuantisationNumBox, ImageBox, FrameTextBox, SecondsTextBox, PositionXTextBox, PositionYTextBox, AngleTextBox, VelocityTextBox, LastSensorTimeTextBox, SensorListBox, LastScanTimeTextBox, ScanListBox, LastDataTimeTextBox, DataListBox, NavigationText, TimeFormat, DistanceFormat);
+            WinFormComponents = new SubscribedComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, ImageBox, FrameTextBox, SecondsTextBox, PositionXTextBox, PositionYTextBox, AngleTextBox, VelocityTextBox, LastSensorTimeTextBox, SensorListBox, LastScanTimeTextBox, ScanListBox, LastDataTimeTextBox, DataListBox, NavigationText, TimeFormat, DistanceFormat);
 
             // Publish Sensor data to SensorListBox
             if (SensorListBox != null)
@@ -314,7 +371,7 @@ namespace FEI.IRK.HM.RMR.Lib
                 {
                     foreach (TimelineItem ItemWithSensorData in ItemsWithSensorData)
                     {
-                        SensorListBox.Items.Add(String.Format("T = [{0}] s\tD = [{1}] mm\tA = [{2}]°", ItemWithSensorData.Time.ToString(TimeFormat), ItemWithSensorData.SensorData.Distance.ToString(DistanceFormat), ItemWithSensorData.SensorData.Angle.ToString()));
+                        SensorListBox.Items.Add(String.Format("Senzor:\tT = [{0}] s\tD = [{1}] mm\tA = [{2}]°", ItemWithSensorData.Time.ToString(TimeFormat), ItemWithSensorData.SensorData.Distance.ToString(DistanceFormat), ItemWithSensorData.SensorData.Angle.ToString()));
                     }
                 }
             }
@@ -327,7 +384,7 @@ namespace FEI.IRK.HM.RMR.Lib
                 {
                     foreach (TimelineItem ItemWithScanData in ItemsWithScanData)
                     {
-                        ScanListBox.Items.Add(String.Format("T = [{0}] s\tP = [{1}]", ItemWithScanData.Time.ToString(TimeFormat), ItemWithScanData.LaserScans.Length.ToString()));
+                        ScanListBox.Items.Add(String.Format("Laser:\tT = [{0}] s\tP = [{1}]", ItemWithScanData.Time.ToString(TimeFormat), ItemWithScanData.LaserScans.Length.ToString()));
                     }
                 }
             }
@@ -342,15 +399,15 @@ namespace FEI.IRK.HM.RMR.Lib
                     {
                         if (ItemWithData.SensorData != null && ItemWithData.LaserScans != null)
                         {
-                            DataListBox.Items.Add(String.Format("T = [{0}] s\tD = [{1}] mm\tA = [{2}]°\tP = [{1}]", ItemWithData.Time.ToString(TimeFormat), ItemWithData.SensorData.Distance.ToString(DistanceFormat), ItemWithData.SensorData.Angle.ToString(), ItemWithData.LaserScans.Length.ToString()));
+                            DataListBox.Items.Add(String.Format("Oboje:\tT = [{0}] s\tD = [{1}] mm\tA = [{2}]°\tP = [{3}]", ItemWithData.Time.ToString(TimeFormat), ItemWithData.SensorData.Distance.ToString(DistanceFormat), ItemWithData.SensorData.Angle.ToString(), ItemWithData.LaserScans.Length.ToString()));
                         }
                         else if (ItemWithData.SensorData != null && ItemWithData.LaserScans == null)
                         {
-                            DataListBox.Items.Add(String.Format("T = [{0}] s\tD = [{1}] mm\tA = [{2}]°", ItemWithData.Time.ToString(TimeFormat), ItemWithData.SensorData.Distance.ToString(DistanceFormat), ItemWithData.SensorData.Angle.ToString()));
+                            DataListBox.Items.Add(String.Format("Senzor:\tT = [{0}] s\tD = [{1}] mm\tA = [{2}]°", ItemWithData.Time.ToString(TimeFormat), ItemWithData.SensorData.Distance.ToString(DistanceFormat), ItemWithData.SensorData.Angle.ToString()));
                         }
                         else if (ItemWithData.SensorData == null && ItemWithData.LaserScans != null)
                         {
-                            DataListBox.Items.Add(String.Format("T = [{0}] s\tP = [{1}]", ItemWithData.Time.ToString(TimeFormat), ItemWithData.LaserScans.Length.ToString()));
+                            DataListBox.Items.Add(String.Format("Laser:\tT = [{0}] s\tP = [{1}]", ItemWithData.Time.ToString(TimeFormat), ItemWithData.LaserScans.Length.ToString()));
                         }
                     }
                 }
@@ -369,6 +426,11 @@ namespace FEI.IRK.HM.RMR.Lib
             if (ShowMapCheckBox != null)
             {
                 ShowMapCheckBox.CheckedChanged += RobotSettings_ValueChanged;
+            }
+            // Subscribe to DisplayRobotTrackCheckBox Value changed event
+            if (DisplayRobotTrackCheckBox != null)
+            {
+                DisplayRobotTrackCheckBox.CheckedChanged += RobotSettings_ValueChanged;
             }
             // Subscribe to MapQuantisationNumBox Value changed event
             if (MapQuantisationNumBox != null)
@@ -413,6 +475,11 @@ namespace FEI.IRK.HM.RMR.Lib
             {
                 WinFormComponents.ShowMapCheckBox.CheckedChanged -= RobotSettings_ValueChanged;
             }
+            // Unsubscribe to DisplayRobotTrackCheckBox Value changed event
+            if (WinFormComponents.DisplayRobotTrackCheckBox != null)
+            {
+                WinFormComponents.DisplayRobotTrackCheckBox.CheckedChanged -= RobotSettings_ValueChanged;
+            }
             // Unsubscribe to MapQuantisationNumBox Value changed event
             if (WinFormComponents.MapQuantisationNumBox != null)
             {
@@ -437,6 +504,9 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <param name="FrameNo">Frame number in current timeline</param>
         public void GoToFrame(int FrameNo)
         {
+            // Save Previous FrameNo in this function
+            int PreviousFrameNo = CurrentFrameNo;
+
             // Set CurrentFrameNo
             CurrentFrameNo = FrameNo;
 
@@ -460,7 +530,10 @@ namespace FEI.IRK.HM.RMR.Lib
             // Check if ImageBox is subscribed and Start Drawing
             if (WinFormComponents.ImageBox != null)
             {
-                WinFormComponents.ImageBox.Invalidate();
+                if (ShouldInvalidatePictureBoxInNewFrame(PreviousFrameNo, FrameNo))
+                {
+                    WinFormComponents.ImageBox.Invalidate();
+                }                
             }
             
         }
@@ -484,13 +557,19 @@ namespace FEI.IRK.HM.RMR.Lib
         {
             return (int)(Time * (double)TimelineRateFactor);
         }
-        
+
 
         #endregion
 
 
         #region Protected functions
 
+
+        /// <summary>
+        /// Function indicating that the contents of the image was changed and whether to invalidate PictureBox
+        /// </summary>
+        /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
+        protected abstract Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo);
 
         /// <summary>
         /// Function for painting on the PictureBox - this function is meant to be overriden

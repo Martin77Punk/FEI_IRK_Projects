@@ -28,7 +28,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     {
                         if (SingleScan.Distance != 0)
                         {
-                            double ObstacleDistance = SingleScan.Distance * 10; // cm to mm
+                            double ObstacleDistance = (1.5281 * SingleScan.Distance + 1.9913) * 10; // cm to mm
                             Obstacle CurObstacle = new Obstacle();
                             if (FollowRobot)
                             {
