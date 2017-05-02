@@ -50,10 +50,14 @@
     <Compile Include="Localization\RobotPathTimeLine.cs" />
     <Compile Include="MappingTimeline.cs" />
     <Compile Include="NavigationTimeline.cs" />
+    <Compile Include="Navigation\FloodMap.cs" />
+    <Compile Include="Navigation\FloodMapper.cs" />
+    <Compile Include="Navigation\FloodMapPoint.cs" />
     <Compile Include="Navigation\NavigationPath.cs" />
     <Compile Include="Navigation\Obstacle.cs" />
     <Compile Include="Navigation\ObstacleItem.cs" />
     <Compile Include="Navigation\ObstacleItemList.cs" />
+    <Compile Include="Navigation\TrajectoryPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\RobotSensorDataList.cs" />
     <Compile Include="Data\RPLidarHelper.cs" />

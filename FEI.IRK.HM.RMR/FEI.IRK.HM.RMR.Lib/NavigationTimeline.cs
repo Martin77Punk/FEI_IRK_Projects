@@ -164,7 +164,7 @@ namespace FEI.IRK.HM.RMR.Lib
             NavigationList.Add(StartPosition);
             // Add first tangent
             NavigationPath NextPath = GetBestTangentToDestination(NavigationList.Last(), DestinationPosition);
-            RemainingDistance = GetRemainingDistance(NextPath);
+            RemainingDistance = GetRemainingDistance(NextPath, DestinationPosition);
             NavigationList.Add(NextPath);
             while (RemainingDistance != 0)
             {
@@ -179,7 +179,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     NavigationPath ObstacleDetour = FindObstacleDetour(NavigationList.Last(), DestinationPosition);
                     if (ObstacleDetour == null) break;
                     NextPath = GetBestTangentToDestination(ObstacleDetour, DestinationPosition);
-                    DistanceFromDetour = GetRemainingDistance(NextPath);
+                    DistanceFromDetour = GetRemainingDistance(NextPath, DestinationPosition);
                     if ((RemainingDistance - DistanceFromDetour) < 1)
                     {
                         WallCheckMode = true;
@@ -188,7 +188,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     {
                         NavigationList.Add(ObstacleDetour);
                         NavigationList.Add(NextPath);
-                        RemainingDistance = GetRemainingDistance(NavigationList.Last());
+                        RemainingDistance = GetRemainingDistance(NavigationList.Last(), DestinationPosition);
                     }
                 }
             }
@@ -305,7 +305,7 @@ namespace FEI.IRK.HM.RMR.Lib
         private NavigationPath FindObstacleDetour(NavigationPath MyPosition, NavigationPath Destination)
         {
             double DetourDistance = (double)TangentBugDetour;
-            double CurrentDistance = GetRemainingDistance(MyPosition);
+            double CurrentDistance = GetRemainingDistance(MyPosition, Destination);
             NavigationPath[] Detours = new NavigationPath[360];
             double[] DetourDistances = new double[360];
             NavigationPath[] DetouredTangents = new NavigationPath[360];
@@ -315,9 +315,9 @@ namespace FEI.IRK.HM.RMR.Lib
             for (int Angle = 0; Angle < 360; Angle++)
             {
                 Detours[Angle] = GetMaxTangentByAngleAndDistance(MyPosition, Angle, DetourDistance);
-                DetourDistances[Angle] = GetRemainingDistance(Detours[Angle]);
+                DetourDistances[Angle] = GetRemainingDistance(Detours[Angle], Destination);
                 DetouredTangents[Angle] = GetBestTangentToDestination(Detours[Angle], Destination);
-                DetouredDistances[Angle] = GetRemainingDistance(DetouredTangents[Angle]);
+                DetouredDistances[Angle] = GetRemainingDistance(DetouredTangents[Angle], Destination);
                 if (DetouredDistances[Angle] < BestDetourDistance)
                 {
                     BestDetourDistance = DetouredDistances[Angle];
@@ -326,16 +326,23 @@ namespace FEI.IRK.HM.RMR.Lib
             }
             return BestDetour;
         }
-        
+
+
+        //private NavigationPath[] FindWallDetour(NavigationPath MyPosition, NavigationPath Destination)
+        //{
+
+        //}
+
+
         /// <summary>
         /// Counts the remaining Euclid distance from current position to destination
         /// </summary>
         /// <param name="MyPosition">Current position</param>
         /// <returns>Euclid distance from current position to destination</returns>
-        private double GetRemainingDistance(NavigationPath MyPosition)
+        private double GetRemainingDistance(NavigationPath MyPosition, NavigationPath Destination)
         {
-            double DifferenceX = NavigateToX - MyPosition.PositionX;
-            double DifferenceY = NavigateToY - MyPosition.PositionY;
+            double DifferenceX = Destination.PositionX - MyPosition.PositionX;
+            double DifferenceY = Destination.PositionY - MyPosition.PositionY;
             return Math.Sqrt(DifferenceX * DifferenceX + DifferenceY * DifferenceY);
         }
 

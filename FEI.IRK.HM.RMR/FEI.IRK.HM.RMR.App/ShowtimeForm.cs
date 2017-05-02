@@ -16,7 +16,7 @@ namespace FEI.IRK.HM.RMR.App
         // SETTING Constants:
         private readonly decimal RobotDiameterMin = 150;
         private readonly decimal RobotDiameterMax = 400;
-        private readonly decimal RobotDiameterDef = 200;
+        private readonly decimal RobotDiameterDef = 300;
         private readonly decimal TangentBugDetourMin = 100;
         private readonly decimal TangentBugDetourMax = 5000;
         private readonly decimal TangentBugDetourDef = 300;
@@ -37,6 +37,7 @@ namespace FEI.IRK.HM.RMR.App
         private LocalizationTimeline TimelineLocalization;
         private NavigationTimeline TimelineNavigation;
         private MappingTimeline TimelineMapping;
+        private TrajectoryTimeline TimelineTrajectory;
 
         // Control
         private int CurrentFrame = 0;
@@ -84,7 +85,7 @@ namespace FEI.IRK.HM.RMR.App
 
             // Initialize Timelines
             TimelinesInit();
-            
+
             // Initialize Form Components: TimeTrackBar
             TimeTrackBar.Minimum = 0;
             TimeTrackBar.Maximum = TimelineLocalization.TotalFrames;
@@ -128,6 +129,8 @@ namespace FEI.IRK.HM.RMR.App
                 PlayerTimer.Interval = PlayerTimer.Interval * 10;
             }
 
+            
+
         }
 
 
@@ -146,6 +149,10 @@ namespace FEI.IRK.HM.RMR.App
             TimelineMapping = new MappingTimeline(SensorData, ScanData);
             TimelineMapping.SubscribeComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, Task3ImageBox, Task3FrameTextBox, Task3TimeTextBox, Task3PosXTextBox, Task3PosYTextBox, Task3AngleTextBox, Task3VelocityTextBox, null, null, null, null, Task3LastDataTextBox, Task3DataListBox, null);
 
+            // Initialize TrajectoryTimeline
+            TimelineTrajectory = new TrajectoryTimeline(SensorData, ScanData, MapQuantisationDef);
+            TimelineTrajectory.SubscribeComponents(RobotDiameterNumericBox, TangentBugDetourNumericBox, ShowMapCheckBox, DisplayRobotTrackCheckBox, MapQuantisationNumBox, Task4ImageBox, null, null, null, null, null, null, null, null, null, null, null, null, Task4NavigationText);
+
         }
 
 
@@ -158,6 +165,7 @@ namespace FEI.IRK.HM.RMR.App
             TimelineLocalization.GoToFrame(CurrentFrame);
             TimelineNavigation.GoToFrame(CurrentFrame);
             TimelineMapping.GoToFrame(CurrentFrame);
+            TimelineTrajectory.GoToFrame(CurrentFrame);
         }
 
 
@@ -470,17 +478,18 @@ namespace FEI.IRK.HM.RMR.App
 
         private void Task4ButtonTrajectory_Click(object sender, EventArgs e)
         {
-            // TODO
+            TimelineTrajectory.TrajectoryStart();
         }
 
         private void Task4ButtonCancel_Click(object sender, EventArgs e)
         {
-            // TODO
+            TimelineTrajectory.TrajectoryEnd();
         }
 
         private void Task4ImageBox_Click(object sender, EventArgs e)
         {
-            // TODO
+            MouseEventArgs mea = (MouseEventArgs)e;
+            TimelineTrajectory.TrajectoryClick(mea.X, mea.Y);
         }
 
         #endregion

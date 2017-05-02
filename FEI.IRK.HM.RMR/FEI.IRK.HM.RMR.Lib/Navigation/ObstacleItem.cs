@@ -14,6 +14,8 @@ namespace FEI.IRK.HM.RMR.Lib
         /// Current Frame number
         /// </summary>
         public int FrameNo;
+
+        public bool HasScanData;
         /// <summary>
         /// Collection of all obstacles found at the current time frame
         /// </summary>

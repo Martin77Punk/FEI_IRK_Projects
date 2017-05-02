@@ -526,6 +526,7 @@ namespace FEI.IRK.HM.RMR.Lib
             WinFormComponents.SetAngle(TimeItem.Phi);
             WinFormComponents.SetLastSensorSeconds(TimeItem.Time - TimelineData.GetLastItemTimeWithSensorData(TimeItem.FrameNo));
             WinFormComponents.SetLastScanSeconds(TimeItem.Time - TimelineData.GetLastItemTimeWithScanData(TimeItem.FrameNo));
+            WinFormComponents.SetLastDataSeconds(TimeItem.Time - TimelineData.GetLastItemTimeWithAnyData(TimeItem.FrameNo));
 
             // Check if ImageBox is subscribed and Start Drawing
             if (WinFormComponents.ImageBox != null)

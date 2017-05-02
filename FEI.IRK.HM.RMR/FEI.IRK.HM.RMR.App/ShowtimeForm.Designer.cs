@@ -99,23 +99,6 @@
             this.Task4NavigationText = new System.Windows.Forms.TextBox();
             this.Task4ButtonCancel = new System.Windows.Forms.Button();
             this.Task4ButtonTrajectory = new System.Windows.Forms.Button();
-            this.lblTask4VelocityMms = new System.Windows.Forms.Label();
-            this.lblTask4Velocity = new System.Windows.Forms.Label();
-            this.Task4VelocityTextBox = new System.Windows.Forms.TextBox();
-            this.lblTask4AngleDegree = new System.Windows.Forms.Label();
-            this.lblTask4Angle = new System.Windows.Forms.Label();
-            this.Task4AngleTextBox = new System.Windows.Forms.TextBox();
-            this.lblTask4PosYMm = new System.Windows.Forms.Label();
-            this.lblTask4PosY = new System.Windows.Forms.Label();
-            this.Task4PosYTextBox = new System.Windows.Forms.TextBox();
-            this.lblTask4PosXMm = new System.Windows.Forms.Label();
-            this.lblTask4PosX = new System.Windows.Forms.Label();
-            this.Task4PosXTextBox = new System.Windows.Forms.TextBox();
-            this.lblTask4TimeSec = new System.Windows.Forms.Label();
-            this.lblTask4Time = new System.Windows.Forms.Label();
-            this.Task4TimeTextBox = new System.Windows.Forms.TextBox();
-            this.lblTask4Frame = new System.Windows.Forms.Label();
-            this.Task4FrameTextBox = new System.Windows.Forms.TextBox();
             this.Task4ImageBox = new System.Windows.Forms.PictureBox();
             this.TimeTrackBar = new System.Windows.Forms.TrackBar();
             this.btnMediaLast = new System.Windows.Forms.Button();
@@ -129,6 +112,7 @@
             this.RobotDiameterNumericBox = new System.Windows.Forms.NumericUpDown();
             this.lblTaskAllAverage = new System.Windows.Forms.Label();
             this.groupTaskSet3 = new System.Windows.Forms.GroupBox();
+            this.DisplayRobotTrackCheckBox = new System.Windows.Forms.CheckBox();
             this.ShowMapCheckBox = new System.Windows.Forms.CheckBox();
             this.groupTaskSet4 = new System.Windows.Forms.GroupBox();
             this.lblTask4Mm = new System.Windows.Forms.Label();
@@ -136,11 +120,10 @@
             this.lblTask4Quant = new System.Windows.Forms.Label();
             this.TimeNumericBox = new System.Windows.Forms.NumericUpDown();
             this.PlayerTimer = new System.Windows.Forms.Timer(this.components);
-            this.DisplayRobotTrackCheckBox = new System.Windows.Forms.CheckBox();
             this.groupTaskSet2 = new System.Windows.Forms.GroupBox();
-            this.lblTask2Detour = new System.Windows.Forms.Label();
-            this.TangentBugDetourNumericBox = new System.Windows.Forms.NumericUpDown();
             this.lblTask2Mm = new System.Windows.Forms.Label();
+            this.TangentBugDetourNumericBox = new System.Windows.Forms.NumericUpDown();
+            this.lblTask2Detour = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupTask1.SuspendLayout();
@@ -884,44 +867,27 @@
             this.groupTask4.Controls.Add(this.Task4NavigationText);
             this.groupTask4.Controls.Add(this.Task4ButtonCancel);
             this.groupTask4.Controls.Add(this.Task4ButtonTrajectory);
-            this.groupTask4.Controls.Add(this.lblTask4VelocityMms);
-            this.groupTask4.Controls.Add(this.lblTask4Velocity);
-            this.groupTask4.Controls.Add(this.Task4VelocityTextBox);
-            this.groupTask4.Controls.Add(this.lblTask4AngleDegree);
-            this.groupTask4.Controls.Add(this.lblTask4Angle);
-            this.groupTask4.Controls.Add(this.Task4AngleTextBox);
-            this.groupTask4.Controls.Add(this.lblTask4PosYMm);
-            this.groupTask4.Controls.Add(this.lblTask4PosY);
-            this.groupTask4.Controls.Add(this.Task4PosYTextBox);
-            this.groupTask4.Controls.Add(this.lblTask4PosXMm);
-            this.groupTask4.Controls.Add(this.lblTask4PosX);
-            this.groupTask4.Controls.Add(this.Task4PosXTextBox);
-            this.groupTask4.Controls.Add(this.lblTask4TimeSec);
-            this.groupTask4.Controls.Add(this.lblTask4Time);
-            this.groupTask4.Controls.Add(this.Task4TimeTextBox);
-            this.groupTask4.Controls.Add(this.lblTask4Frame);
-            this.groupTask4.Controls.Add(this.Task4FrameTextBox);
             this.groupTask4.Location = new System.Drawing.Point(839, 4);
             this.groupTask4.Name = "groupTask4";
             this.groupTask4.Size = new System.Drawing.Size(376, 492);
             this.groupTask4.TabIndex = 3;
             this.groupTask4.TabStop = false;
-            this.groupTask4.Text = "Úloha 1: Detaily";
+            this.groupTask4.Text = "Úloha 4: Plánovanie trajektórie";
             // 
             // Task4NavigationText
             // 
             this.Task4NavigationText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.Task4NavigationText.Location = new System.Drawing.Point(6, 240);
+            this.Task4NavigationText.Location = new System.Drawing.Point(6, 65);
             this.Task4NavigationText.Multiline = true;
             this.Task4NavigationText.Name = "Task4NavigationText";
             this.Task4NavigationText.ReadOnly = true;
-            this.Task4NavigationText.Size = new System.Drawing.Size(364, 246);
+            this.Task4NavigationText.Size = new System.Drawing.Size(364, 421);
             this.Task4NavigationText.TabIndex = 30;
             // 
             // Task4ButtonCancel
             // 
-            this.Task4ButtonCancel.Location = new System.Drawing.Point(204, 210);
+            this.Task4ButtonCancel.Location = new System.Drawing.Point(204, 35);
             this.Task4ButtonCancel.Name = "Task4ButtonCancel";
             this.Task4ButtonCancel.Size = new System.Drawing.Size(120, 23);
             this.Task4ButtonCancel.TabIndex = 29;
@@ -931,172 +897,13 @@
             // 
             // Task4ButtonTrajectory
             // 
-            this.Task4ButtonTrajectory.Location = new System.Drawing.Point(54, 210);
+            this.Task4ButtonTrajectory.Location = new System.Drawing.Point(54, 35);
             this.Task4ButtonTrajectory.Name = "Task4ButtonTrajectory";
             this.Task4ButtonTrajectory.Size = new System.Drawing.Size(120, 23);
             this.Task4ButtonTrajectory.TabIndex = 28;
             this.Task4ButtonTrajectory.Text = "Nájdi trajektóriu...";
             this.Task4ButtonTrajectory.UseVisualStyleBackColor = true;
             this.Task4ButtonTrajectory.Click += new System.EventHandler(this.Task4ButtonTrajectory_Click);
-            // 
-            // lblTask4VelocityMms
-            // 
-            this.lblTask4VelocityMms.AutoSize = true;
-            this.lblTask4VelocityMms.Location = new System.Drawing.Point(286, 172);
-            this.lblTask4VelocityMms.Name = "lblTask4VelocityMms";
-            this.lblTask4VelocityMms.Size = new System.Drawing.Size(51, 13);
-            this.lblTask4VelocityMms.TabIndex = 16;
-            this.lblTask4VelocityMms.Text = "mm / sec";
-            // 
-            // lblTask4Velocity
-            // 
-            this.lblTask4Velocity.AutoSize = true;
-            this.lblTask4Velocity.Location = new System.Drawing.Point(122, 172);
-            this.lblTask4Velocity.Name = "lblTask4Velocity";
-            this.lblTask4Velocity.Size = new System.Drawing.Size(52, 13);
-            this.lblTask4Velocity.TabIndex = 15;
-            this.lblTask4Velocity.Text = "Rýchlosť:";
-            // 
-            // Task4VelocityTextBox
-            // 
-            this.Task4VelocityTextBox.Location = new System.Drawing.Point(180, 169);
-            this.Task4VelocityTextBox.Name = "Task4VelocityTextBox";
-            this.Task4VelocityTextBox.ReadOnly = true;
-            this.Task4VelocityTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4VelocityTextBox.TabIndex = 14;
-            this.Task4VelocityTextBox.Text = "0";
-            this.Task4VelocityTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTask4AngleDegree
-            // 
-            this.lblTask4AngleDegree.AutoSize = true;
-            this.lblTask4AngleDegree.Location = new System.Drawing.Point(286, 145);
-            this.lblTask4AngleDegree.Name = "lblTask4AngleDegree";
-            this.lblTask4AngleDegree.Size = new System.Drawing.Size(11, 13);
-            this.lblTask4AngleDegree.TabIndex = 13;
-            this.lblTask4AngleDegree.Text = "°";
-            // 
-            // lblTask4Angle
-            // 
-            this.lblTask4Angle.AutoSize = true;
-            this.lblTask4Angle.Location = new System.Drawing.Point(142, 145);
-            this.lblTask4Angle.Name = "lblTask4Angle";
-            this.lblTask4Angle.Size = new System.Drawing.Size(32, 13);
-            this.lblTask4Angle.TabIndex = 12;
-            this.lblTask4Angle.Text = "Uhol:";
-            // 
-            // Task4AngleTextBox
-            // 
-            this.Task4AngleTextBox.Location = new System.Drawing.Point(180, 142);
-            this.Task4AngleTextBox.Name = "Task4AngleTextBox";
-            this.Task4AngleTextBox.ReadOnly = true;
-            this.Task4AngleTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4AngleTextBox.TabIndex = 11;
-            this.Task4AngleTextBox.Text = "0";
-            this.Task4AngleTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTask4PosYMm
-            // 
-            this.lblTask4PosYMm.AutoSize = true;
-            this.lblTask4PosYMm.Location = new System.Drawing.Point(286, 118);
-            this.lblTask4PosYMm.Name = "lblTask4PosYMm";
-            this.lblTask4PosYMm.Size = new System.Drawing.Size(23, 13);
-            this.lblTask4PosYMm.TabIndex = 10;
-            this.lblTask4PosYMm.Text = "mm";
-            // 
-            // lblTask4PosY
-            // 
-            this.lblTask4PosY.AutoSize = true;
-            this.lblTask4PosY.Location = new System.Drawing.Point(118, 118);
-            this.lblTask4PosY.Name = "lblTask4PosY";
-            this.lblTask4PosY.Size = new System.Drawing.Size(56, 13);
-            this.lblTask4PosY.TabIndex = 9;
-            this.lblTask4PosY.Text = "Pozícia Y:";
-            // 
-            // Task4PosYTextBox
-            // 
-            this.Task4PosYTextBox.Location = new System.Drawing.Point(180, 115);
-            this.Task4PosYTextBox.Name = "Task4PosYTextBox";
-            this.Task4PosYTextBox.ReadOnly = true;
-            this.Task4PosYTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4PosYTextBox.TabIndex = 8;
-            this.Task4PosYTextBox.Text = "0";
-            this.Task4PosYTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTask4PosXMm
-            // 
-            this.lblTask4PosXMm.AutoSize = true;
-            this.lblTask4PosXMm.Location = new System.Drawing.Point(286, 91);
-            this.lblTask4PosXMm.Name = "lblTask4PosXMm";
-            this.lblTask4PosXMm.Size = new System.Drawing.Size(23, 13);
-            this.lblTask4PosXMm.TabIndex = 7;
-            this.lblTask4PosXMm.Text = "mm";
-            // 
-            // lblTask4PosX
-            // 
-            this.lblTask4PosX.AutoSize = true;
-            this.lblTask4PosX.Location = new System.Drawing.Point(118, 91);
-            this.lblTask4PosX.Name = "lblTask4PosX";
-            this.lblTask4PosX.Size = new System.Drawing.Size(56, 13);
-            this.lblTask4PosX.TabIndex = 6;
-            this.lblTask4PosX.Text = "Pozícia X:";
-            // 
-            // Task4PosXTextBox
-            // 
-            this.Task4PosXTextBox.Location = new System.Drawing.Point(180, 88);
-            this.Task4PosXTextBox.Name = "Task4PosXTextBox";
-            this.Task4PosXTextBox.ReadOnly = true;
-            this.Task4PosXTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4PosXTextBox.TabIndex = 5;
-            this.Task4PosXTextBox.Text = "0";
-            this.Task4PosXTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTask4TimeSec
-            // 
-            this.lblTask4TimeSec.AutoSize = true;
-            this.lblTask4TimeSec.Location = new System.Drawing.Point(286, 49);
-            this.lblTask4TimeSec.Name = "lblTask4TimeSec";
-            this.lblTask4TimeSec.Size = new System.Drawing.Size(42, 13);
-            this.lblTask4TimeSec.TabIndex = 4;
-            this.lblTask4TimeSec.Text = "sekúnd";
-            // 
-            // lblTask4Time
-            // 
-            this.lblTask4Time.AutoSize = true;
-            this.lblTask4Time.Location = new System.Drawing.Point(146, 49);
-            this.lblTask4Time.Name = "lblTask4Time";
-            this.lblTask4Time.Size = new System.Drawing.Size(28, 13);
-            this.lblTask4Time.TabIndex = 3;
-            this.lblTask4Time.Text = "Čas:";
-            // 
-            // Task4TimeTextBox
-            // 
-            this.Task4TimeTextBox.Location = new System.Drawing.Point(180, 46);
-            this.Task4TimeTextBox.Name = "Task4TimeTextBox";
-            this.Task4TimeTextBox.ReadOnly = true;
-            this.Task4TimeTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4TimeTextBox.TabIndex = 2;
-            this.Task4TimeTextBox.Text = "0";
-            this.Task4TimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTask4Frame
-            // 
-            this.lblTask4Frame.AutoSize = true;
-            this.lblTask4Frame.Location = new System.Drawing.Point(127, 22);
-            this.lblTask4Frame.Name = "lblTask4Frame";
-            this.lblTask4Frame.Size = new System.Drawing.Size(47, 13);
-            this.lblTask4Frame.TabIndex = 1;
-            this.lblTask4Frame.Text = "Snímok:";
-            // 
-            // Task4FrameTextBox
-            // 
-            this.Task4FrameTextBox.Location = new System.Drawing.Point(180, 19);
-            this.Task4FrameTextBox.Name = "Task4FrameTextBox";
-            this.Task4FrameTextBox.ReadOnly = true;
-            this.Task4FrameTextBox.Size = new System.Drawing.Size(100, 20);
-            this.Task4FrameTextBox.TabIndex = 0;
-            this.Task4FrameTextBox.Text = "0";
-            this.Task4FrameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Task4ImageBox
             // 
@@ -1257,6 +1064,16 @@
             this.groupTaskSet3.TabStop = false;
             this.groupTaskSet3.Text = "Úloha 3: Mapovanie";
             // 
+            // DisplayRobotTrackCheckBox
+            // 
+            this.DisplayRobotTrackCheckBox.AutoSize = true;
+            this.DisplayRobotTrackCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.DisplayRobotTrackCheckBox.Name = "DisplayRobotTrackCheckBox";
+            this.DisplayRobotTrackCheckBox.Size = new System.Drawing.Size(138, 17);
+            this.DisplayRobotTrackCheckBox.TabIndex = 1;
+            this.DisplayRobotTrackCheckBox.Text = "Zobraziť prejdenú cestu";
+            this.DisplayRobotTrackCheckBox.UseVisualStyleBackColor = true;
+            // 
             // ShowMapCheckBox
             // 
             this.ShowMapCheckBox.AutoSize = true;
@@ -1346,16 +1163,6 @@
             // 
             this.PlayerTimer.Tick += new System.EventHandler(this.PlayerTimer_Tick);
             // 
-            // DisplayRobotTrackCheckBox
-            // 
-            this.DisplayRobotTrackCheckBox.AutoSize = true;
-            this.DisplayRobotTrackCheckBox.Location = new System.Drawing.Point(6, 42);
-            this.DisplayRobotTrackCheckBox.Name = "DisplayRobotTrackCheckBox";
-            this.DisplayRobotTrackCheckBox.Size = new System.Drawing.Size(138, 17);
-            this.DisplayRobotTrackCheckBox.TabIndex = 1;
-            this.DisplayRobotTrackCheckBox.Text = "Zobraziť prejdenú cestu";
-            this.DisplayRobotTrackCheckBox.UseVisualStyleBackColor = true;
-            // 
             // groupTaskSet2
             // 
             this.groupTaskSet2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1369,14 +1176,14 @@
             this.groupTaskSet2.TabStop = false;
             this.groupTaskSet2.Text = "Úloha 2: Navigácia";
             // 
-            // lblTask2Detour
+            // lblTask2Mm
             // 
-            this.lblTask2Detour.AutoSize = true;
-            this.lblTask2Detour.Location = new System.Drawing.Point(6, 30);
-            this.lblTask2Detour.Name = "lblTask2Detour";
-            this.lblTask2Detour.Size = new System.Drawing.Size(65, 13);
-            this.lblTask2Detour.TabIndex = 0;
-            this.lblTask2Detour.Text = "Obchádzka:";
+            this.lblTask2Mm.AutoSize = true;
+            this.lblTask2Mm.Location = new System.Drawing.Point(133, 30);
+            this.lblTask2Mm.Name = "lblTask2Mm";
+            this.lblTask2Mm.Size = new System.Drawing.Size(23, 13);
+            this.lblTask2Mm.TabIndex = 2;
+            this.lblTask2Mm.Text = "mm";
             // 
             // TangentBugDetourNumericBox
             // 
@@ -1405,14 +1212,14 @@
             0,
             0});
             // 
-            // lblTask2Mm
+            // lblTask2Detour
             // 
-            this.lblTask2Mm.AutoSize = true;
-            this.lblTask2Mm.Location = new System.Drawing.Point(133, 30);
-            this.lblTask2Mm.Name = "lblTask2Mm";
-            this.lblTask2Mm.Size = new System.Drawing.Size(23, 13);
-            this.lblTask2Mm.TabIndex = 2;
-            this.lblTask2Mm.Text = "mm";
+            this.lblTask2Detour.AutoSize = true;
+            this.lblTask2Detour.Location = new System.Drawing.Point(6, 30);
+            this.lblTask2Detour.Name = "lblTask2Detour";
+            this.lblTask2Detour.Size = new System.Drawing.Size(65, 13);
+            this.lblTask2Detour.TabIndex = 0;
+            this.lblTask2Detour.Text = "Obchádzka:";
             // 
             // ShowtimeForm
             // 
@@ -1557,23 +1364,6 @@
         private System.Windows.Forms.TextBox Task3FrameTextBox;
         private System.Windows.Forms.PictureBox Task3ImageBox;
         private System.Windows.Forms.GroupBox groupTask4;
-        private System.Windows.Forms.Label lblTask4VelocityMms;
-        private System.Windows.Forms.Label lblTask4Velocity;
-        private System.Windows.Forms.TextBox Task4VelocityTextBox;
-        private System.Windows.Forms.Label lblTask4AngleDegree;
-        private System.Windows.Forms.Label lblTask4Angle;
-        private System.Windows.Forms.TextBox Task4AngleTextBox;
-        private System.Windows.Forms.Label lblTask4PosYMm;
-        private System.Windows.Forms.Label lblTask4PosY;
-        private System.Windows.Forms.TextBox Task4PosYTextBox;
-        private System.Windows.Forms.Label lblTask4PosXMm;
-        private System.Windows.Forms.Label lblTask4PosX;
-        private System.Windows.Forms.TextBox Task4PosXTextBox;
-        private System.Windows.Forms.Label lblTask4TimeSec;
-        private System.Windows.Forms.Label lblTask4Time;
-        private System.Windows.Forms.TextBox Task4TimeTextBox;
-        private System.Windows.Forms.Label lblTask4Frame;
-        private System.Windows.Forms.TextBox Task4FrameTextBox;
         private System.Windows.Forms.PictureBox Task4ImageBox;
         private System.Windows.Forms.Button Task2ButtonCancel;
         private System.Windows.Forms.Button Task2ButtonNavigate;

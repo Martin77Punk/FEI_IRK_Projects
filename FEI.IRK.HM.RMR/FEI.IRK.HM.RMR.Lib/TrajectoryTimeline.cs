@@ -14,7 +14,6 @@ namespace FEI.IRK.HM.RMR.Lib
 
         private Color ColorBackground = Color.AliceBlue;
         private Brush BrushTrajectory = Brushes.OrangeRed;
-        private Brush BrushRobot = Brushes.DarkSlateBlue;
         private Brush BrushObstacle = Brushes.DarkOliveGreen;
 
         private int ZeroX = 0;
@@ -22,6 +21,16 @@ namespace FEI.IRK.HM.RMR.Lib
         private double TransformMultiplier = 0;
         private double MaxCoordX = 0;
         private double MaxCoordY = 0;
+
+        private FloodMapper FloodHelper;
+
+        private Boolean Navigate = false;
+        private Boolean NavigateClickedStart = false;
+        private Boolean NavigateClickedEnd = false;
+        private int NavigateFromX = 0;
+        private int NavigateFromY = 0;
+        private int NavigateToX = 0;
+        private int NavigateToY = 0;
 
         #endregion
 
@@ -38,10 +47,236 @@ namespace FEI.IRK.HM.RMR.Lib
         /// </summary>
         /// <param name="SensorData">Robot sensor data</param>
         /// <param name="ScanData">RPLidar Laser scanner data</param>
-        public TrajectoryTimeline(RobotSensorDataList SensorData, RPLidarMeasurementList ScanData) : base(SensorData, ScanData)
+        public TrajectoryTimeline(RobotSensorDataList SensorData, RPLidarMeasurementList ScanData, decimal PixelLength) : base(SensorData, ScanData)
         {
+            FloodHelper = new FloodMapper(TimelineItems, PixelLength);
             SetDrawingBounds();
         }
+
+        #endregion
+
+
+        #region Public functions
+
+        public void TrajectoryStart()
+        {
+            Navigate = true;
+            NavigateClickedStart = false;
+            NavigateClickedEnd = false;
+            ClearTrajectory();
+            RefreshImageBox();
+            NavigationHint = "Vyber začiatok cesty kliknutím na mapu...";
+        }
+
+
+        public void TrajectoryEnd()
+        {
+            Navigate = false;
+            NavigateClickedStart = false;
+            NavigateClickedEnd = false;
+            ClearTrajectory();
+            RefreshImageBox();
+            NavigationHint = String.Empty;
+        }
+
+
+        public void TrajectoryClick(int PictureBoxX, int PictureBoxY)
+        {
+            int X = UnTransformX(PictureBoxX);
+            int Y = UnTransformY(PictureBoxY);
+
+            if (Navigate)
+            {
+                if (!NavigateClickedStart)
+                {
+                    // Select navigation start
+                    if (X < FloodHelper.Map.MinX || X > FloodHelper.Map.MaxX || Y < FloodHelper.Map.MinY || Y > FloodHelper.Map.MaxY) return;
+                    if (FloodHelper.Map.GetDrawPoint(X, Y) == FloodMapPoint.Obstacle) return;
+                    NavigateFromX = X;
+                    NavigateFromY = Y;
+                    Navigate = true;
+                    NavigateClickedStart = true;
+                    NavigateClickedEnd = false;
+                    NavigationHint = String.Format("Začiatok:\t[\t{0},\t{1}]\r\nVyber koniec cesty kliknutím na mapu...", NavigateFromX, NavigateFromY);
+                    return;
+                }
+
+                if (!NavigateClickedEnd)
+                {
+                    // Select navigation end
+                    if (X < FloodHelper.Map.MinX || X > FloodHelper.Map.MaxX || Y < FloodHelper.Map.MinY || Y > FloodHelper.Map.MaxY) return;
+                    if (FloodHelper.Map.GetDrawPoint(X, Y) == FloodMapPoint.Obstacle) return;
+                    if (X == NavigateFromX && Y == NavigateFromY) return;
+                    NavigateToX = X;
+                    NavigateToY = Y;
+                    Navigate = true;
+                    NavigateClickedStart = true;
+                    NavigateClickedEnd = true;
+                    NavigationHint = String.Format("Začiatok:\t[\t{0},\t{1}]\r\nKoniec:\t[\t{2},\t{3}]\r\n---------------------------------------------------------\r\n", NavigateFromX, NavigateFromY, NavigateToX, NavigateToY);
+                    BuildTrajectory();
+                    RefreshImageBox();
+                    return;
+                }
+            }
+        }
+
+
+        #endregion
+
+
+        #region Private Trajectory functions
+
+
+        private void ClearTrajectory()
+        {
+            for (int x = FloodHelper.Map.MinX; x <= FloodHelper.Map.MaxX; x++)
+            {
+                for (int y = FloodHelper.Map.MinY; y <= FloodHelper.Map.MaxY; y++)
+                {
+                    if (FloodHelper.Map[x, y] != FloodMap.PIXEL_OBSTACLE)
+                    {
+                        FloodHelper.Map[x, y] = FloodMap.PIXEL_FREE;
+                    }
+                }
+            }
+        }
+
+
+        private void BuildTrajectory()
+        {
+            Boolean TrajectoryFound = false;
+            FloodMap TrajectoryMap = new FloodMap(FloodHelper.Map);
+            Queue<TrajectoryPath> RobotPath = new Queue<TrajectoryPath>();
+            RobotPath.Enqueue(new TrajectoryPath { X = NavigateToX, Y = NavigateToY, No = 2});
+
+            while (RobotPath.Count > 0)
+            {
+                TrajectoryPath TItem = RobotPath.Dequeue();
+                if (TrajectoryMap[TItem.X, TItem.Y] != FloodMap.PIXEL_FREE)
+                    continue;
+                TrajectoryMap[TItem.X, TItem.Y] = TItem.No;
+                if (TItem.X == NavigateFromX && TItem.Y == NavigateFromY)
+                {
+                    TrajectoryFound = true;
+                    break;
+                }
+                ushort NextNo = (ushort)(TItem.No + 1);
+                // UP     -> +y
+                if (TItem.X >= TrajectoryMap.MinX && TItem.X <= TrajectoryMap.MaxX && TItem.Y + 1 >= TrajectoryMap.MinY && TItem.Y + 1 <= TrajectoryMap.MaxY)
+                    RobotPath.Enqueue(new TrajectoryPath { X = TItem.X, Y = TItem.Y + 1, No = NextNo});
+
+                // RIGHT  -> +x
+                if (TItem.X +1 >= TrajectoryMap.MinX && TItem.X + 1 <= TrajectoryMap.MaxX && TItem.Y >= TrajectoryMap.MinY && TItem.Y <= TrajectoryMap.MaxY)
+                    RobotPath.Enqueue(new TrajectoryPath { X = TItem.X + 1, Y = TItem.Y, No = NextNo });
+
+                // DOWN   -> -y
+                if (TItem.X >= TrajectoryMap.MinX && TItem.X <= TrajectoryMap.MaxX && TItem.Y - 1>= TrajectoryMap.MinY && TItem.Y - 1 <= TrajectoryMap.MaxY)
+                    RobotPath.Enqueue(new TrajectoryPath { X = TItem.X, Y = TItem.Y - 1, No = NextNo });
+
+                // LEFT   -> -x
+                if (TItem.X - 1 >= TrajectoryMap.MinX && TItem.X - 1 <= TrajectoryMap.MaxX && TItem.Y >= TrajectoryMap.MinY && TItem.Y <= TrajectoryMap.MaxY)
+                    RobotPath.Enqueue(new TrajectoryPath { X = TItem.X - 1, Y = TItem.Y, No = NextNo });
+
+            }
+
+            if (TrajectoryFound)
+            {
+                int PosX = NavigateFromX;
+                int PosY = NavigateFromY;
+                for (ushort i = TrajectoryMap[NavigateFromX, NavigateFromY]; i >= 2; i--)
+                {
+                    FloodHelper.Map[PosX, PosY] = i;
+                    if (i > 2)
+                    {
+                        // UP     -> +y
+                        if (PosX >= FloodHelper.Map.MinX && PosX <= FloodHelper.Map.MaxX && PosY + 1 >= FloodHelper.Map.MinY && PosY + 1 <= FloodHelper.Map.MaxY)
+                        {
+                            if (TrajectoryMap[PosX, PosY + 1] == i - 1)
+                            {
+                                NavigationHint += String.Format("Hore:\t[\t{0},\t{1}]\r\n", PosX, PosY + 1);
+                                PosY = PosY + 1;
+                                continue;
+                            }
+                        }
+
+                        // RIGHT  -> +x
+                        if (PosX + 1 >= FloodHelper.Map.MinX && PosX + 1 <= FloodHelper.Map.MaxX && PosY >= FloodHelper.Map.MinY && PosY <= FloodHelper.Map.MaxY)
+                        {
+                            if (TrajectoryMap[PosX + 1, PosY] == i - 1)
+                            {
+                                NavigationHint += String.Format("Vpravo:\t[\t{0},\t{1}]\r\n", PosX + 1, PosY);
+                                PosX = PosX + 1;
+                                continue;
+                            }
+                        }
+
+                        // DOWN   -> -y
+                        if (PosX >= FloodHelper.Map.MinX && PosX <= FloodHelper.Map.MaxX && PosY - 1 >= FloodHelper.Map.MinY && PosY - 1 <= FloodHelper.Map.MaxY)
+                        {
+                            if (TrajectoryMap[PosX, PosY - 1] == i - 1)
+                            {
+                                NavigationHint += String.Format("Dole:\t[\t{0},\t{1}]\r\n", PosX, PosY - 1);
+                                PosY = PosY - 1;
+                                continue;
+                            }
+                        }
+
+                        // LEFT   -> -x
+                        if (PosX - 1 >= FloodHelper.Map.MinX && PosX - 1 <= FloodHelper.Map.MaxX && PosY >= FloodHelper.Map.MinY && PosY <= FloodHelper.Map.MaxY)
+                        {
+                            if (TrajectoryMap[PosX - 1, PosY] == i - 1)
+                            {
+                                NavigationHint += String.Format("Vľavo:\t[\t{0},\t{1}]\r\n", PosX - 1, PosY);
+                                PosX = PosX - 1;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                NavigationHint = "Nemožno nájsť cestu!";
+            }
+
+        }
+
+
+        /// <summary>
+        /// Transform the X position from picture box to axis X position
+        /// </summary>
+        /// <param name="ValueX">Picture box X position</param>
+        /// <returns>Axis X position</returns>
+        private int UnTransformX(int ValueX)
+        {
+            if (ZeroX - ValueX == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return (int)Math.Ceiling(-(ZeroX - ValueX) * TransformMultiplier / (double)MapQuantisationRate)-1;
+            }
+        }
+
+        /// <summary>
+        /// Transform the Y position from picture box to axis Y position
+        /// </summary>
+        /// <param name="ValueY">Picture box Y position</param>
+        /// <returns>Axis Y position</returns>
+        private int UnTransformY(int ValueY)
+        {
+            if (ZeroY - ValueY == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return (int)Math.Ceiling((ZeroY - ValueY) * TransformMultiplier / (double)MapQuantisationRate);
+            }
+        }
+
+
 
         #endregion
 
@@ -54,7 +289,7 @@ namespace FEI.IRK.HM.RMR.Lib
         /// <returns>TRUE if PictureBox should be invalidated and repainted</returns>
         protected override Boolean ShouldInvalidatePictureBoxInNewFrame(int PreviousFrameNo, int NewFrameNo)
         {
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -68,30 +303,34 @@ namespace FEI.IRK.HM.RMR.Lib
         {
             // Initialize bounds and clear background
             SetDrawingBounds();
+            // Check whether recreate map
+            FloodHelper.CheckMapRecreate(MapQuantisationRate);
             TransformSetPicureBoxSizes(PictureBoxMaxX, PictureBoxMaxY);
             g.Clear(ColorBackground);
-            // Paint Obstacles
-            //if (ObstacleList[FrameNo].Obstacles != null)
-            //{
-            //    foreach (Obstacle SingleObstacle in ObstacleList[FrameNo].Obstacles)
-            //    {
-            //        g.FillRectangle(BrushObstacle, TransformX(SingleObstacle.PositionX), TransformY(SingleObstacle.PositionY), 1, 1);
-            //    }
-            //}
-            //if (NavigateClicked)
-            //{
-            //    for (int i = 1; i < NavigationList.Count; i++)
-            //    {
-            //        g.DrawLine(PenRobotNavigation, TransformX(NavigationList[i - 1].PositionX), TransformY(NavigationList[i - 1].PositionY), TransformX(NavigationList[i].PositionX), TransformY(NavigationList[i].PositionY));
-            //    }
-            //}
-            //// Paint Robot
-            //double RobotRadius = (double)RobotDiameter / 2;
-            //int RobotTopX = TransformX(-RobotRadius);
-            //int RobotTopY = TransformY(RobotRadius);
-            //int robotSize = (int)((double)RobotDiameter / TransformMultiplier);
-            //g.DrawEllipse(PenRobot, RobotTopX, RobotTopY, robotSize, robotSize);
-            //g.FillPie(BrushRobot, RobotTopX, RobotTopY, robotSize, robotSize, 15, -30);
+            // Paint Map
+            for (int x = FloodHelper.Map.MinX; x <= FloodHelper.Map.MaxX; x++)
+            {
+                for (int y = FloodHelper.Map.MinY; y <= FloodHelper.Map.MaxY; y++)
+                {
+                    if (FloodHelper.Map.GetDrawPoint(x, y) != FloodMapPoint.FreeSpace)
+                    {
+                        double PosX = x * (double)MapQuantisationRate;
+                        double PosY = y * (double)MapQuantisationRate;
+                        Brush PixelBrush = (FloodHelper.Map.GetDrawPoint(x, y) == FloodMapPoint.NavigationTrack) ? BrushTrajectory : BrushObstacle;
+                        g.FillRectangle(PixelBrush, TransformX(PosX), TransformY(PosY), (float)MapQuantisationRate / (float)TransformMultiplier, (float)MapQuantisationRate / (float)TransformMultiplier);
+                    }
+
+
+                    //if (x == 0 && y == 0)
+                    //{
+                    //    double PosX = x * (double)MapQuantisationRate;
+                    //    double PosY = y * (double)MapQuantisationRate;
+                    //    g.FillRectangle(BrushTrajectory, TransformX(PosX), TransformY(PosY), (float)MapQuantisationRate / (float)TransformMultiplier, (float)MapQuantisationRate / (float)TransformMultiplier);
+                    //}
+
+                }
+            }
+            
         }
 
         /// <summary>
@@ -99,29 +338,10 @@ namespace FEI.IRK.HM.RMR.Lib
         /// </summary>
         private void SetDrawingBounds()
         {
-            //// Get Min and Max obstacle position
-            //double ObstacleMinX = Math.Floor(ObstacleList.Min(OList => (OList.Obstacles != null) ? OList.Obstacles.Min(OArray => OArray.PositionX) : 0));
-            //double ObstacleMaxX = Math.Ceiling(ObstacleList.Max(OList => (OList.Obstacles != null) ? OList.Obstacles.Max(OArray => OArray.PositionX) : 0));
-            //double ObstacleMinY = Math.Floor(ObstacleList.Min(OList => (OList.Obstacles != null) ? OList.Obstacles.Min(OArray => OArray.PositionY) : 0));
-            //double ObstacleMaxY = Math.Ceiling(ObstacleList.Max(OList => (OList.Obstacles != null) ? OList.Obstacles.Max(OArray => OArray.PositionY) : 0));
-
-            //// Get totals track length for obstacles on X and Y axis
-            //double ObstacleTrackXLength = Math.Ceiling(Math.Abs(ObstacleMaxX - ObstacleMinX));
-            //double ObstacleTrackYLength = Math.Ceiling(Math.Abs(ObstacleMaxY - ObstacleMinY));
-
-            //// Extend axis bounds with robot diameter and 5% of track length from each side
-            //ObstacleMinX = Math.Floor(ObstacleMinX - (double)RobotDiameter - 0.05 * ObstacleTrackXLength);
-            //ObstacleMaxX = Math.Ceiling(ObstacleMaxX + (double)RobotDiameter + 0.05 * ObstacleTrackXLength);
-            //ObstacleMinY = Math.Floor(ObstacleMinY - (double)RobotDiameter - 0.05 * ObstacleTrackYLength);
-            //ObstacleMaxY = Math.Ceiling(ObstacleMaxY + (double)RobotDiameter + 0.05 * ObstacleTrackYLength);
-
-            //// Get Max coords for each axis
-            //MaxObstacleCoordX = 0;
-            //MaxObstacleCoordY = 0;
-            //if (Math.Abs(ObstacleMinX) > MaxObstacleCoordX) MaxObstacleCoordX = Math.Abs(ObstacleMinX);
-            //if (Math.Abs(ObstacleMaxX) > MaxObstacleCoordX) MaxObstacleCoordX = Math.Abs(ObstacleMaxX);
-            //if (Math.Abs(ObstacleMinY) > MaxObstacleCoordY) MaxObstacleCoordY = Math.Abs(ObstacleMinY);
-            //if (Math.Abs(ObstacleMaxY) > MaxObstacleCoordY) MaxObstacleCoordY = Math.Abs(ObstacleMaxY);
+            // Update Max coords for X and Y
+            Tuple<double, double> Coords = FloodHelper.UpdateDrawingBounds();
+            MaxCoordX = Coords.Item1;
+            MaxCoordY = Coords.Item2;
         }
 
         /// <summary>

@@ -46,6 +46,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     // add item with new list of obstacles
                     ObstacleItem item = new ObstacleItem();
                     item.FrameNo = i;
+                    item.HasScanData = true;
                     item.Obstacles = ObstacleList.ToArray();
                     Add(item);
                     // save link to last obstacles list
@@ -56,6 +57,7 @@ namespace FEI.IRK.HM.RMR.Lib
                     // add last obstacles
                     ObstacleItem item = new ObstacleItem();
                     item.FrameNo = i;
+                    item.HasScanData = false;
                     item.Obstacles = LastObstacles;
                     Add(item);
                 }
