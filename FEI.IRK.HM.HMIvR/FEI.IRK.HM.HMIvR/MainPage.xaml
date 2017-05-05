@@ -4,13 +4,16 @@
              xmlns:local="clr-namespace:FEI.IRK.HM.HMIvR"
              x:Class="FEI.IRK.HM.HMIvR.MainPage"
              Title="HMI v Robotike">
-            <!-- Padding="0,20,0,0" -->
 
     <ContentPage.Content>
-        <StackLayout>
-            <!-- <Label Text="Predná kamera:" /> -->
-            <local:CameraPreview Camera="Front" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-        </StackLayout>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <local:CameraPreview Camera="Front" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" />
+            <Image Source="compass_arrow.png" AbsoluteLayout.LayoutFlags="None" AbsoluteLayout.LayoutBounds="20, 20, 50, 50" IsVisible="{Binding CompassVisible}" Rotation="{Binding CompassRotation}" />
+            <ProgressBar AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0.5, 0.9, 0.9, 0.05" Progress="{Binding LightLevelValue}" Opacity="0.5" IsVisible="{Binding LightLevelVisible}" />
+            <Label Text="{Binding PressureText}" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0.5, 0.05, 0.5, 0.05" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="Aqua" Opacity="0.4" FontAttributes="Bold" IsVisible="{Binding PressureVisible}" />
+            <Image Source="gyro.png" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="{Binding GyroscopeBounds}" IsOpaque="True" Opacity=".4" IsVisible="{Binding GyroscopeVisible}" />
+            <Image Source="{Binding AccelerometerImage}" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="{Binding AccelerometerBounds}" IsOpaque="True" Opacity=".4" IsVisible="{Binding AccelerometerVisible}" />
+        </AbsoluteLayout>
     </ContentPage.Content>
 
 </ContentPage>

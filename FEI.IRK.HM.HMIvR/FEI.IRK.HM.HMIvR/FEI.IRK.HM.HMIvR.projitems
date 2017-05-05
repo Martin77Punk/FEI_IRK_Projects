@@ -14,9 +14,12 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CameraOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CameraPreview.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeviceSensors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDeviceSensors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)HmiViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">

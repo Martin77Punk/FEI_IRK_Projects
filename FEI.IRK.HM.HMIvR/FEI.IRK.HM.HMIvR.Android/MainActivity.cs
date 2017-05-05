@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace FEI.IRK.HM.HMIvR.Droid
 {
-	[Activity (Label = "HMI v Robotike", Icon = "@drawable/icon", Theme="@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity (Label = "HMI v Robotike", Icon = "@drawable/icon", Theme="@style/MainTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 	{
 		protected override void OnCreate (Bundle bundle)
