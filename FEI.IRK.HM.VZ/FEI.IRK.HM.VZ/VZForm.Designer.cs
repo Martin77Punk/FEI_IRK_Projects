@@ -55,29 +55,33 @@
             this.ImageBoxYellow = new Emgu.CV.UI.ImageBox();
             this.CheckFlipVertical = new System.Windows.Forms.CheckBox();
             this.CheckFlipHorizontal = new System.Windows.Forms.CheckBox();
-            this.ButtonStop = new System.Windows.Forms.Button();
+            this.ButtonPause = new System.Windows.Forms.Button();
             this.ButtonStart = new System.Windows.Forms.Button();
             this.Task2Tab = new System.Windows.Forms.TabPage();
-            this.Task2PicBox = new System.Windows.Forms.PictureBox();
-            this.lblTask2CapLoaded = new System.Windows.Forms.Label();
-            this.lblTask2CapFinished = new System.Windows.Forms.Label();
-            this.LabelImgLoaded = new System.Windows.Forms.Label();
-            this.LabelImgFinished = new System.Windows.Forms.Label();
-            this.ButtonImgImport = new System.Windows.Forms.Button();
-            this.ButtonImgProcess = new System.Windows.Forms.Button();
-            this.lblMinRadius = new System.Windows.Forms.Label();
-            this.NumericMinRadius = new System.Windows.Forms.NumericUpDown();
-            this.lblMaxRadius = new System.Windows.Forms.Label();
-            this.NumericMaxRadius = new System.Windows.Forms.NumericUpDown();
-            this.lblPx1 = new System.Windows.Forms.Label();
-            this.lblPx2 = new System.Windows.Forms.Label();
-            this.lblMinThreshold = new System.Windows.Forms.Label();
-            this.NumericMinThreshold = new System.Windows.Forms.NumericUpDown();
             this.ImageTypeGroupBox = new System.Windows.Forms.GroupBox();
-            this.ImgShowRadio1 = new System.Windows.Forms.RadioButton();
-            this.ImgShowRadio2 = new System.Windows.Forms.RadioButton();
-            this.ImgShowRadio3 = new System.Windows.Forms.RadioButton();
             this.ImgShowRadio4 = new System.Windows.Forms.RadioButton();
+            this.ImgShowRadio3 = new System.Windows.Forms.RadioButton();
+            this.ImgShowRadio2 = new System.Windows.Forms.RadioButton();
+            this.ImgShowRadio1 = new System.Windows.Forms.RadioButton();
+            this.NumericMinThreshold = new System.Windows.Forms.NumericUpDown();
+            this.lblMinThreshold = new System.Windows.Forms.Label();
+            this.lblPx2 = new System.Windows.Forms.Label();
+            this.lblPx1 = new System.Windows.Forms.Label();
+            this.NumericMaxRadius = new System.Windows.Forms.NumericUpDown();
+            this.lblMaxRadius = new System.Windows.Forms.Label();
+            this.NumericMinRadius = new System.Windows.Forms.NumericUpDown();
+            this.lblMinRadius = new System.Windows.Forms.Label();
+            this.ButtonImgProcess = new System.Windows.Forms.Button();
+            this.ButtonImgImport = new System.Windows.Forms.Button();
+            this.LabelImgFinished = new System.Windows.Forms.Label();
+            this.LabelImgLoaded = new System.Windows.Forms.Label();
+            this.lblTask2CapFinished = new System.Windows.Forms.Label();
+            this.lblTask2CapLoaded = new System.Windows.Forms.Label();
+            this.Task2PicBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.NumericMinDistance = new System.Windows.Forms.NumericUpDown();
+            this.lblPx3 = new System.Windows.Forms.Label();
+            this.ButtonStop = new System.Windows.Forms.Button();
             this.VZTabMain.SuspendLayout();
             this.Task1Tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownContrast)).BeginInit();
@@ -99,11 +103,12 @@
             this.Screen8Tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBoxYellow)).BeginInit();
             this.Task2Tab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Task2PicBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMinRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMaxRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMinThreshold)).BeginInit();
             this.ImageTypeGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMaxRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Task2PicBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinDistance)).BeginInit();
             this.SuspendLayout();
             // 
             // VZTabMain
@@ -121,6 +126,7 @@
             // 
             // Task1Tab
             // 
+            this.Task1Tab.Controls.Add(this.ButtonStop);
             this.Task1Tab.Controls.Add(this.lblFoundPbjects);
             this.Task1Tab.Controls.Add(this.FoundObjectsListBox);
             this.Task1Tab.Controls.Add(this.NumericUpDownContrast);
@@ -129,7 +135,7 @@
             this.Task1Tab.Controls.Add(this.VZTabScreens);
             this.Task1Tab.Controls.Add(this.CheckFlipVertical);
             this.Task1Tab.Controls.Add(this.CheckFlipHorizontal);
-            this.Task1Tab.Controls.Add(this.ButtonStop);
+            this.Task1Tab.Controls.Add(this.ButtonPause);
             this.Task1Tab.Controls.Add(this.ButtonStart);
             this.Task1Tab.Location = new System.Drawing.Point(4, 22);
             this.Task1Tab.Name = "Task1Tab";
@@ -391,21 +397,21 @@
             this.CheckFlipHorizontal.UseVisualStyleBackColor = true;
             this.CheckFlipHorizontal.CheckedChanged += new System.EventHandler(this.CheckFlipHorizontal_CheckedChanged);
             // 
-            // ButtonStop
+            // ButtonPause
             // 
-            this.ButtonStop.Location = new System.Drawing.Point(1056, 39);
-            this.ButtonStop.Name = "ButtonStop";
-            this.ButtonStop.Size = new System.Drawing.Size(146, 23);
-            this.ButtonStop.TabIndex = 1;
-            this.ButtonStop.Text = "Stop";
-            this.ButtonStop.UseVisualStyleBackColor = true;
-            this.ButtonStop.Click += new System.EventHandler(this.ButtonStop_Click);
+            this.ButtonPause.Location = new System.Drawing.Point(984, 39);
+            this.ButtonPause.Name = "ButtonPause";
+            this.ButtonPause.Size = new System.Drawing.Size(109, 23);
+            this.ButtonPause.TabIndex = 1;
+            this.ButtonPause.Text = "Pauza";
+            this.ButtonPause.UseVisualStyleBackColor = true;
+            this.ButtonPause.Click += new System.EventHandler(this.ButtonPause_Click);
             // 
             // ButtonStart
             // 
             this.ButtonStart.Location = new System.Drawing.Point(869, 39);
             this.ButtonStart.Name = "ButtonStart";
-            this.ButtonStart.Size = new System.Drawing.Size(146, 23);
+            this.ButtonStart.Size = new System.Drawing.Size(109, 23);
             this.ButtonStart.TabIndex = 0;
             this.ButtonStart.Text = "Štart";
             this.ButtonStart.UseVisualStyleBackColor = true;
@@ -413,6 +419,9 @@
             // 
             // Task2Tab
             // 
+            this.Task2Tab.Controls.Add(this.lblPx3);
+            this.Task2Tab.Controls.Add(this.NumericMinDistance);
+            this.Task2Tab.Controls.Add(this.label1);
             this.Task2Tab.Controls.Add(this.ImageTypeGroupBox);
             this.Task2Tab.Controls.Add(this.NumericMinThreshold);
             this.Task2Tab.Controls.Add(this.lblMinThreshold);
@@ -437,115 +446,120 @@
             this.Task2Tab.Text = "Úloha 2";
             this.Task2Tab.UseVisualStyleBackColor = true;
             // 
-            // Task2PicBox
+            // ImageTypeGroupBox
             // 
-            this.Task2PicBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Task2PicBox.Location = new System.Drawing.Point(17, 40);
-            this.Task2PicBox.Name = "Task2PicBox";
-            this.Task2PicBox.Size = new System.Drawing.Size(800, 600);
-            this.Task2PicBox.TabIndex = 0;
-            this.Task2PicBox.TabStop = false;
+            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio4);
+            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio3);
+            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio2);
+            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio1);
+            this.ImageTypeGroupBox.Location = new System.Drawing.Point(856, 296);
+            this.ImageTypeGroupBox.Name = "ImageTypeGroupBox";
+            this.ImageTypeGroupBox.Size = new System.Drawing.Size(361, 170);
+            this.ImageTypeGroupBox.TabIndex = 15;
+            this.ImageTypeGroupBox.TabStop = false;
+            this.ImageTypeGroupBox.Text = "Zobraziť";
             // 
-            // lblTask2CapLoaded
+            // ImgShowRadio4
             // 
-            this.lblTask2CapLoaded.AutoSize = true;
-            this.lblTask2CapLoaded.Location = new System.Drawing.Point(868, 56);
-            this.lblTask2CapLoaded.Name = "lblTask2CapLoaded";
-            this.lblTask2CapLoaded.Size = new System.Drawing.Size(110, 13);
-            this.lblTask2CapLoaded.TabIndex = 1;
-            this.lblTask2CapLoaded.Text = "Obrázok importovaný:";
+            this.ImgShowRadio4.AutoSize = true;
+            this.ImgShowRadio4.Enabled = false;
+            this.ImgShowRadio4.Location = new System.Drawing.Point(54, 115);
+            this.ImgShowRadio4.Name = "ImgShowRadio4";
+            this.ImgShowRadio4.Size = new System.Drawing.Size(99, 17);
+            this.ImgShowRadio4.TabIndex = 3;
+            this.ImgShowRadio4.TabStop = true;
+            this.ImgShowRadio4.Text = "Finálny obrázok";
+            this.ImgShowRadio4.UseVisualStyleBackColor = true;
+            this.ImgShowRadio4.CheckedChanged += new System.EventHandler(this.ImgShowRadio4_CheckedChanged);
             // 
-            // lblTask2CapFinished
+            // ImgShowRadio3
             // 
-            this.lblTask2CapFinished.AutoSize = true;
-            this.lblTask2CapFinished.Location = new System.Drawing.Point(1055, 56);
-            this.lblTask2CapFinished.Name = "lblTask2CapFinished";
-            this.lblTask2CapFinished.Size = new System.Drawing.Size(108, 13);
-            this.lblTask2CapFinished.TabIndex = 2;
-            this.lblTask2CapFinished.Text = "Obrázok spracovaný:";
+            this.ImgShowRadio3.AutoSize = true;
+            this.ImgShowRadio3.Enabled = false;
+            this.ImgShowRadio3.Location = new System.Drawing.Point(54, 91);
+            this.ImgShowRadio3.Name = "ImgShowRadio3";
+            this.ImgShowRadio3.Size = new System.Drawing.Size(108, 17);
+            this.ImgShowRadio3.TabIndex = 2;
+            this.ImgShowRadio3.TabStop = true;
+            this.ImgShowRadio3.Text = "Nájdené kružnice";
+            this.ImgShowRadio3.UseVisualStyleBackColor = true;
+            this.ImgShowRadio3.CheckedChanged += new System.EventHandler(this.ImgShowRadio3_CheckedChanged);
             // 
-            // LabelImgLoaded
+            // ImgShowRadio2
             // 
-            this.LabelImgLoaded.AutoSize = true;
-            this.LabelImgLoaded.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.LabelImgLoaded.ForeColor = System.Drawing.Color.Red;
-            this.LabelImgLoaded.Location = new System.Drawing.Point(984, 56);
-            this.LabelImgLoaded.Name = "LabelImgLoaded";
-            this.LabelImgLoaded.Size = new System.Drawing.Size(28, 13);
-            this.LabelImgLoaded.TabIndex = 3;
-            this.LabelImgLoaded.Text = "NIE";
+            this.ImgShowRadio2.AutoSize = true;
+            this.ImgShowRadio2.Enabled = false;
+            this.ImgShowRadio2.Location = new System.Drawing.Point(54, 67);
+            this.ImgShowRadio2.Name = "ImgShowRadio2";
+            this.ImgShowRadio2.Size = new System.Drawing.Size(178, 17);
+            this.ImgShowRadio2.TabIndex = 1;
+            this.ImgShowRadio2.TabStop = true;
+            this.ImgShowRadio2.Text = "Hrany pomocou Sobel operátora";
+            this.ImgShowRadio2.UseVisualStyleBackColor = true;
+            this.ImgShowRadio2.CheckedChanged += new System.EventHandler(this.ImgShowRadio2_CheckedChanged);
             // 
-            // LabelImgFinished
+            // ImgShowRadio1
             // 
-            this.LabelImgFinished.AutoSize = true;
-            this.LabelImgFinished.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.LabelImgFinished.ForeColor = System.Drawing.Color.Red;
-            this.LabelImgFinished.Location = new System.Drawing.Point(1169, 56);
-            this.LabelImgFinished.Name = "LabelImgFinished";
-            this.LabelImgFinished.Size = new System.Drawing.Size(28, 13);
-            this.LabelImgFinished.TabIndex = 4;
-            this.LabelImgFinished.Text = "NIE";
+            this.ImgShowRadio1.AutoSize = true;
+            this.ImgShowRadio1.Enabled = false;
+            this.ImgShowRadio1.Location = new System.Drawing.Point(54, 43);
+            this.ImgShowRadio1.Name = "ImgShowRadio1";
+            this.ImgShowRadio1.Size = new System.Drawing.Size(124, 17);
+            this.ImgShowRadio1.TabIndex = 0;
+            this.ImgShowRadio1.TabStop = true;
+            this.ImgShowRadio1.Text = "Importovaný obrázok";
+            this.ImgShowRadio1.UseVisualStyleBackColor = true;
+            this.ImgShowRadio1.CheckedChanged += new System.EventHandler(this.ImgShowRadio1_CheckedChanged);
             // 
-            // ButtonImgImport
+            // NumericMinThreshold
             // 
-            this.ButtonImgImport.Location = new System.Drawing.Point(856, 91);
-            this.ButtonImgImport.Name = "ButtonImgImport";
-            this.ButtonImgImport.Size = new System.Drawing.Size(179, 23);
-            this.ButtonImgImport.TabIndex = 5;
-            this.ButtonImgImport.Text = "Importuj obrázok";
-            this.ButtonImgImport.UseVisualStyleBackColor = true;
-            this.ButtonImgImport.Click += new System.EventHandler(this.ButtonImgImport_Click);
-            // 
-            // ButtonImgProcess
-            // 
-            this.ButtonImgProcess.Location = new System.Drawing.Point(1041, 91);
-            this.ButtonImgProcess.Name = "ButtonImgProcess";
-            this.ButtonImgProcess.Size = new System.Drawing.Size(176, 23);
-            this.ButtonImgProcess.TabIndex = 6;
-            this.ButtonImgProcess.Text = "Spusti spracovanie";
-            this.ButtonImgProcess.UseVisualStyleBackColor = true;
-            this.ButtonImgProcess.Click += new System.EventHandler(this.ButtonImgProcess_Click);
-            // 
-            // lblMinRadius
-            // 
-            this.lblMinRadius.AutoSize = true;
-            this.lblMinRadius.Location = new System.Drawing.Point(939, 149);
-            this.lblMinRadius.Name = "lblMinRadius";
-            this.lblMinRadius.Size = new System.Drawing.Size(96, 13);
-            this.lblMinRadius.TabIndex = 7;
-            this.lblMinRadius.Text = "Minimálny polomer:";
-            // 
-            // NumericMinRadius
-            // 
-            this.NumericMinRadius.Location = new System.Drawing.Point(1041, 147);
-            this.NumericMinRadius.Maximum = new decimal(new int[] {
-            600,
+            this.NumericMinThreshold.Location = new System.Drawing.Point(1041, 214);
+            this.NumericMinThreshold.Maximum = new decimal(new int[] {
+            400,
             0,
             0,
             0});
-            this.NumericMinRadius.Minimum = new decimal(new int[] {
-            10,
+            this.NumericMinThreshold.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
             0});
-            this.NumericMinRadius.Name = "NumericMinRadius";
-            this.NumericMinRadius.Size = new System.Drawing.Size(77, 20);
-            this.NumericMinRadius.TabIndex = 8;
-            this.NumericMinRadius.Value = new decimal(new int[] {
-            60,
+            this.NumericMinThreshold.Name = "NumericMinThreshold";
+            this.NumericMinThreshold.Size = new System.Drawing.Size(77, 20);
+            this.NumericMinThreshold.TabIndex = 14;
+            this.NumericMinThreshold.Value = new decimal(new int[] {
+            100,
             0,
             0,
             0});
-            this.NumericMinRadius.ValueChanged += new System.EventHandler(this.NumericMinRadius_ValueChanged);
+            this.NumericMinThreshold.ValueChanged += new System.EventHandler(this.NumericMinThreshold_ValueChanged);
             // 
-            // lblMaxRadius
+            // lblMinThreshold
             // 
-            this.lblMaxRadius.AutoSize = true;
-            this.lblMaxRadius.Location = new System.Drawing.Point(936, 175);
-            this.lblMaxRadius.Name = "lblMaxRadius";
-            this.lblMaxRadius.Size = new System.Drawing.Size(99, 13);
-            this.lblMaxRadius.TabIndex = 9;
-            this.lblMaxRadius.Text = "Maximálny polomer:";
+            this.lblMinThreshold.AutoSize = true;
+            this.lblMinThreshold.Location = new System.Drawing.Point(929, 216);
+            this.lblMinThreshold.Name = "lblMinThreshold";
+            this.lblMinThreshold.Size = new System.Drawing.Size(106, 13);
+            this.lblMinThreshold.TabIndex = 13;
+            this.lblMinThreshold.Text = "Minimálny Threshold:";
+            // 
+            // lblPx2
+            // 
+            this.lblPx2.AutoSize = true;
+            this.lblPx2.Location = new System.Drawing.Point(1124, 175);
+            this.lblPx2.Name = "lblPx2";
+            this.lblPx2.Size = new System.Drawing.Size(18, 13);
+            this.lblPx2.TabIndex = 12;
+            this.lblPx2.Text = "px";
+            // 
+            // lblPx1
+            // 
+            this.lblPx1.AutoSize = true;
+            this.lblPx1.Location = new System.Drawing.Point(1124, 149);
+            this.lblPx1.Name = "lblPx1";
+            this.lblPx1.Size = new System.Drawing.Size(18, 13);
+            this.lblPx1.TabIndex = 11;
+            this.lblPx1.Text = "px";
             // 
             // NumericMaxRadius
             // 
@@ -570,120 +584,156 @@
             0});
             this.NumericMaxRadius.ValueChanged += new System.EventHandler(this.NumericMaxRadius_ValueChanged);
             // 
-            // lblPx1
+            // lblMaxRadius
             // 
-            this.lblPx1.AutoSize = true;
-            this.lblPx1.Location = new System.Drawing.Point(1124, 149);
-            this.lblPx1.Name = "lblPx1";
-            this.lblPx1.Size = new System.Drawing.Size(18, 13);
-            this.lblPx1.TabIndex = 11;
-            this.lblPx1.Text = "px";
+            this.lblMaxRadius.AutoSize = true;
+            this.lblMaxRadius.Location = new System.Drawing.Point(936, 175);
+            this.lblMaxRadius.Name = "lblMaxRadius";
+            this.lblMaxRadius.Size = new System.Drawing.Size(99, 13);
+            this.lblMaxRadius.TabIndex = 9;
+            this.lblMaxRadius.Text = "Maximálny polomer:";
             // 
-            // lblPx2
+            // NumericMinRadius
             // 
-            this.lblPx2.AutoSize = true;
-            this.lblPx2.Location = new System.Drawing.Point(1124, 175);
-            this.lblPx2.Name = "lblPx2";
-            this.lblPx2.Size = new System.Drawing.Size(18, 13);
-            this.lblPx2.TabIndex = 12;
-            this.lblPx2.Text = "px";
-            // 
-            // lblMinThreshold
-            // 
-            this.lblMinThreshold.AutoSize = true;
-            this.lblMinThreshold.Location = new System.Drawing.Point(929, 216);
-            this.lblMinThreshold.Name = "lblMinThreshold";
-            this.lblMinThreshold.Size = new System.Drawing.Size(106, 13);
-            this.lblMinThreshold.TabIndex = 13;
-            this.lblMinThreshold.Text = "Minimálny Threshold:";
-            // 
-            // NumericMinThreshold
-            // 
-            this.NumericMinThreshold.Location = new System.Drawing.Point(1041, 214);
-            this.NumericMinThreshold.Maximum = new decimal(new int[] {
-            400,
+            this.NumericMinRadius.Location = new System.Drawing.Point(1041, 147);
+            this.NumericMinRadius.Maximum = new decimal(new int[] {
+            600,
             0,
             0,
             0});
-            this.NumericMinThreshold.Minimum = new decimal(new int[] {
-            150,
+            this.NumericMinRadius.Minimum = new decimal(new int[] {
+            10,
             0,
             0,
             0});
-            this.NumericMinThreshold.Name = "NumericMinThreshold";
-            this.NumericMinThreshold.Size = new System.Drawing.Size(77, 20);
-            this.NumericMinThreshold.TabIndex = 14;
-            this.NumericMinThreshold.Value = new decimal(new int[] {
-            200,
+            this.NumericMinRadius.Name = "NumericMinRadius";
+            this.NumericMinRadius.Size = new System.Drawing.Size(77, 20);
+            this.NumericMinRadius.TabIndex = 8;
+            this.NumericMinRadius.Value = new decimal(new int[] {
+            60,
             0,
             0,
             0});
-            this.NumericMinThreshold.ValueChanged += new System.EventHandler(this.NumericMinThreshold_ValueChanged);
+            this.NumericMinRadius.ValueChanged += new System.EventHandler(this.NumericMinRadius_ValueChanged);
             // 
-            // ImageTypeGroupBox
+            // lblMinRadius
             // 
-            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio4);
-            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio3);
-            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio2);
-            this.ImageTypeGroupBox.Controls.Add(this.ImgShowRadio1);
-            this.ImageTypeGroupBox.Location = new System.Drawing.Point(856, 269);
-            this.ImageTypeGroupBox.Name = "ImageTypeGroupBox";
-            this.ImageTypeGroupBox.Size = new System.Drawing.Size(361, 170);
-            this.ImageTypeGroupBox.TabIndex = 15;
-            this.ImageTypeGroupBox.TabStop = false;
-            this.ImageTypeGroupBox.Text = "Zobraziť";
+            this.lblMinRadius.AutoSize = true;
+            this.lblMinRadius.Location = new System.Drawing.Point(939, 149);
+            this.lblMinRadius.Name = "lblMinRadius";
+            this.lblMinRadius.Size = new System.Drawing.Size(96, 13);
+            this.lblMinRadius.TabIndex = 7;
+            this.lblMinRadius.Text = "Minimálny polomer:";
             // 
-            // ImgShowRadio1
+            // ButtonImgProcess
             // 
-            this.ImgShowRadio1.AutoSize = true;
-            this.ImgShowRadio1.Enabled = false;
-            this.ImgShowRadio1.Location = new System.Drawing.Point(54, 43);
-            this.ImgShowRadio1.Name = "ImgShowRadio1";
-            this.ImgShowRadio1.Size = new System.Drawing.Size(124, 17);
-            this.ImgShowRadio1.TabIndex = 0;
-            this.ImgShowRadio1.TabStop = true;
-            this.ImgShowRadio1.Text = "Importovaný obrázok";
-            this.ImgShowRadio1.UseVisualStyleBackColor = true;
-            this.ImgShowRadio1.CheckedChanged += new System.EventHandler(this.ImgShowRadio1_CheckedChanged);
+            this.ButtonImgProcess.Location = new System.Drawing.Point(1041, 91);
+            this.ButtonImgProcess.Name = "ButtonImgProcess";
+            this.ButtonImgProcess.Size = new System.Drawing.Size(176, 23);
+            this.ButtonImgProcess.TabIndex = 6;
+            this.ButtonImgProcess.Text = "Spusti spracovanie";
+            this.ButtonImgProcess.UseVisualStyleBackColor = true;
+            this.ButtonImgProcess.Click += new System.EventHandler(this.ButtonImgProcess_Click);
             // 
-            // ImgShowRadio2
+            // ButtonImgImport
             // 
-            this.ImgShowRadio2.AutoSize = true;
-            this.ImgShowRadio2.Enabled = false;
-            this.ImgShowRadio2.Location = new System.Drawing.Point(54, 67);
-            this.ImgShowRadio2.Name = "ImgShowRadio2";
-            this.ImgShowRadio2.Size = new System.Drawing.Size(178, 17);
-            this.ImgShowRadio2.TabIndex = 1;
-            this.ImgShowRadio2.TabStop = true;
-            this.ImgShowRadio2.Text = "Hrany pomocou Sobel operátora";
-            this.ImgShowRadio2.UseVisualStyleBackColor = true;
-            this.ImgShowRadio2.CheckedChanged += new System.EventHandler(this.ImgShowRadio2_CheckedChanged);
+            this.ButtonImgImport.Location = new System.Drawing.Point(856, 91);
+            this.ButtonImgImport.Name = "ButtonImgImport";
+            this.ButtonImgImport.Size = new System.Drawing.Size(179, 23);
+            this.ButtonImgImport.TabIndex = 5;
+            this.ButtonImgImport.Text = "Importuj obrázok";
+            this.ButtonImgImport.UseVisualStyleBackColor = true;
+            this.ButtonImgImport.Click += new System.EventHandler(this.ButtonImgImport_Click);
             // 
-            // ImgShowRadio3
+            // LabelImgFinished
             // 
-            this.ImgShowRadio3.AutoSize = true;
-            this.ImgShowRadio3.Enabled = false;
-            this.ImgShowRadio3.Location = new System.Drawing.Point(54, 91);
-            this.ImgShowRadio3.Name = "ImgShowRadio3";
-            this.ImgShowRadio3.Size = new System.Drawing.Size(108, 17);
-            this.ImgShowRadio3.TabIndex = 2;
-            this.ImgShowRadio3.TabStop = true;
-            this.ImgShowRadio3.Text = "Nájdené kružnice";
-            this.ImgShowRadio3.UseVisualStyleBackColor = true;
-            this.ImgShowRadio3.CheckedChanged += new System.EventHandler(this.ImgShowRadio3_CheckedChanged);
+            this.LabelImgFinished.AutoSize = true;
+            this.LabelImgFinished.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.LabelImgFinished.ForeColor = System.Drawing.Color.Red;
+            this.LabelImgFinished.Location = new System.Drawing.Point(1169, 56);
+            this.LabelImgFinished.Name = "LabelImgFinished";
+            this.LabelImgFinished.Size = new System.Drawing.Size(28, 13);
+            this.LabelImgFinished.TabIndex = 4;
+            this.LabelImgFinished.Text = "NIE";
             // 
-            // ImgShowRadio4
+            // LabelImgLoaded
             // 
-            this.ImgShowRadio4.AutoSize = true;
-            this.ImgShowRadio4.Enabled = false;
-            this.ImgShowRadio4.Location = new System.Drawing.Point(54, 115);
-            this.ImgShowRadio4.Name = "ImgShowRadio4";
-            this.ImgShowRadio4.Size = new System.Drawing.Size(99, 17);
-            this.ImgShowRadio4.TabIndex = 3;
-            this.ImgShowRadio4.TabStop = true;
-            this.ImgShowRadio4.Text = "Finálny obrázok";
-            this.ImgShowRadio4.UseVisualStyleBackColor = true;
-            this.ImgShowRadio4.CheckedChanged += new System.EventHandler(this.ImgShowRadio4_CheckedChanged);
+            this.LabelImgLoaded.AutoSize = true;
+            this.LabelImgLoaded.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.LabelImgLoaded.ForeColor = System.Drawing.Color.Red;
+            this.LabelImgLoaded.Location = new System.Drawing.Point(984, 56);
+            this.LabelImgLoaded.Name = "LabelImgLoaded";
+            this.LabelImgLoaded.Size = new System.Drawing.Size(28, 13);
+            this.LabelImgLoaded.TabIndex = 3;
+            this.LabelImgLoaded.Text = "NIE";
+            // 
+            // lblTask2CapFinished
+            // 
+            this.lblTask2CapFinished.AutoSize = true;
+            this.lblTask2CapFinished.Location = new System.Drawing.Point(1055, 56);
+            this.lblTask2CapFinished.Name = "lblTask2CapFinished";
+            this.lblTask2CapFinished.Size = new System.Drawing.Size(108, 13);
+            this.lblTask2CapFinished.TabIndex = 2;
+            this.lblTask2CapFinished.Text = "Obrázok spracovaný:";
+            // 
+            // lblTask2CapLoaded
+            // 
+            this.lblTask2CapLoaded.AutoSize = true;
+            this.lblTask2CapLoaded.Location = new System.Drawing.Point(868, 56);
+            this.lblTask2CapLoaded.Name = "lblTask2CapLoaded";
+            this.lblTask2CapLoaded.Size = new System.Drawing.Size(110, 13);
+            this.lblTask2CapLoaded.TabIndex = 1;
+            this.lblTask2CapLoaded.Text = "Obrázok importovaný:";
+            // 
+            // Task2PicBox
+            // 
+            this.Task2PicBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Task2PicBox.Location = new System.Drawing.Point(17, 40);
+            this.Task2PicBox.Name = "Task2PicBox";
+            this.Task2PicBox.Size = new System.Drawing.Size(800, 600);
+            this.Task2PicBox.TabIndex = 0;
+            this.Task2PicBox.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(844, 240);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(191, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Minimálna vzdialenosť stredov kružníc:";
+            // 
+            // NumericMinDistance
+            // 
+            this.NumericMinDistance.Location = new System.Drawing.Point(1041, 240);
+            this.NumericMinDistance.Name = "NumericMinDistance";
+            this.NumericMinDistance.Size = new System.Drawing.Size(77, 20);
+            this.NumericMinDistance.TabIndex = 17;
+            this.NumericMinDistance.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.NumericMinDistance.ValueChanged += new System.EventHandler(this.NumericMinDistance_ValueChanged);
+            // 
+            // lblPx3
+            // 
+            this.lblPx3.AutoSize = true;
+            this.lblPx3.Location = new System.Drawing.Point(1124, 242);
+            this.lblPx3.Name = "lblPx3";
+            this.lblPx3.Size = new System.Drawing.Size(18, 13);
+            this.lblPx3.TabIndex = 18;
+            this.lblPx3.Text = "px";
+            // 
+            // ButtonStop
+            // 
+            this.ButtonStop.Location = new System.Drawing.Point(1099, 39);
+            this.ButtonStop.Name = "ButtonStop";
+            this.ButtonStop.Size = new System.Drawing.Size(109, 23);
+            this.ButtonStop.TabIndex = 10;
+            this.ButtonStop.Text = "Stop";
+            this.ButtonStop.UseVisualStyleBackColor = true;
+            this.ButtonStop.Click += new System.EventHandler(this.ButtonStop_Click);
             // 
             // VZForm
             // 
@@ -722,12 +772,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.ImageBoxYellow)).EndInit();
             this.Task2Tab.ResumeLayout(false);
             this.Task2Tab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Task2PicBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMinRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMaxRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericMinThreshold)).EndInit();
             this.ImageTypeGroupBox.ResumeLayout(false);
             this.ImageTypeGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMaxRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Task2PicBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericMinDistance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -737,7 +788,7 @@
         private System.Windows.Forms.TabControl VZTabMain;
         private System.Windows.Forms.TabPage Task1Tab;
         private System.Windows.Forms.TabPage Task2Tab;
-        private System.Windows.Forms.Button ButtonStop;
+        private System.Windows.Forms.Button ButtonPause;
         private System.Windows.Forms.Button ButtonStart;
         private System.Windows.Forms.TabControl VZTabScreens;
         private System.Windows.Forms.TabPage Screen1Tab;
@@ -783,6 +834,10 @@
         private System.Windows.Forms.RadioButton ImgShowRadio3;
         private System.Windows.Forms.RadioButton ImgShowRadio2;
         private System.Windows.Forms.RadioButton ImgShowRadio1;
+        private System.Windows.Forms.Label lblPx3;
+        private System.Windows.Forms.NumericUpDown NumericMinDistance;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button ButtonStop;
     }
 }
 

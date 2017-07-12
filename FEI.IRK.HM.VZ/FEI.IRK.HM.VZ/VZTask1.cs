@@ -7,6 +7,7 @@ using System.Threading;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using System.Diagnostics;
 
 namespace FEI.IRK.HM.VZ
@@ -297,7 +298,7 @@ namespace FEI.IRK.HM.VZ
         }
 
 
-        public void StopCapture()
+        public void PauseCapture()
         {
             if (CaptureThread != null)
             {
@@ -310,9 +311,21 @@ namespace FEI.IRK.HM.VZ
         }
 
 
+        public void StopCapture()
+        {
+            PauseCapture();
+            if (CaptureDevice != null)
+            {
+                CaptureDevice.Dispose();
+                CaptureDevice = null;
+            }
+            SetEmptyScreens();
+        }
+
+
         public void Dispose()
         {
-            StopCapture();
+            PauseCapture();
             if (CaptureDevice != null)
             {
                 CaptureDevice.Dispose();
@@ -447,21 +460,123 @@ namespace FEI.IRK.HM.VZ
                 CvInvoke.Canny(YellowFrame, YellowCannyFrame, 10, 20);
 
                 // Hough Circles
-                CircleF[] RedCircles = CvInvoke.HoughCircles(RedFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
-                CircleF[] GreenCircles = CvInvoke.HoughCircles(GreenFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
-                CircleF[] BlueCircles = CvInvoke.HoughCircles(BlueFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
-                CircleF[] CyanCircles = CvInvoke.HoughCircles(CyanFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
-                CircleF[] MagentaCircles = CvInvoke.HoughCircles(MagentaFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
-                CircleF[] YellowCircles = CvInvoke.HoughCircles(YellowFrame, HoughType.Gradient, 1, 100, 100, 20, 50, 0);
+                CircleF[] RedCircles = CvInvoke.HoughCircles(RedFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+                CircleF[] GreenCircles = CvInvoke.HoughCircles(GreenFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+                CircleF[] BlueCircles = CvInvoke.HoughCircles(BlueFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+                CircleF[] CyanCircles = CvInvoke.HoughCircles(CyanFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+                CircleF[] MagentaCircles = CvInvoke.HoughCircles(MagentaFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+                CircleF[] YellowCircles = CvInvoke.HoughCircles(YellowFrame, HoughType.Gradient, 1, 100, 100, 30, 20, 0);
+
+                // Triangles and squares
+                List<Triangle2DF> RedTriangles = new List<Triangle2DF>();
+                List<Triangle2DF> GreenTriangles = new List<Triangle2DF>();
+                List<Triangle2DF> BlueTriangles = new List<Triangle2DF>();
+                List<Triangle2DF> CyanTriangles = new List<Triangle2DF>();
+                List<Triangle2DF> MagentaTriangles = new List<Triangle2DF>();
+                List<Triangle2DF> YellowTriangles = new List<Triangle2DF>();
+                List<RotatedRect> RedSquares = new List<RotatedRect>();
+                List<RotatedRect> GreenSquares = new List<RotatedRect>();
+                List<RotatedRect> BlueSquares = new List<RotatedRect>();
+                List<RotatedRect> CyanSquares = new List<RotatedRect>();
+                List<RotatedRect> MagentaSquares = new List<RotatedRect>();
+                List<RotatedRect> YellowSquares = new List<RotatedRect>();
+                for (int t = 1; t <= 6; t++)
+                {
+                    Mat Canny;
+                    List<Triangle2DF> Triangles;
+                    List<RotatedRect> Squares;
+                    if (t == 1)
+                    {
+                        Canny = RedCannyFrame;
+                        Triangles = RedTriangles;
+                        Squares = RedSquares;
+                    }
+                    else if (t == 2)
+                    {
+                        Canny = GreenCannyFrame;
+                        Triangles = GreenTriangles;
+                        Squares = GreenSquares;
+                    }
+                    else if (t == 3)
+                    {
+                        Canny = BlueCannyFrame;
+                        Triangles = BlueTriangles;
+                        Squares = BlueSquares;
+                    }
+                    else if (t == 4)
+                    {
+                        Canny = CyanCannyFrame;
+                        Triangles = CyanTriangles;
+                        Squares = CyanSquares;
+                    }
+                    else if (t == 5)
+                    {
+                        Canny = MagentaFrame;
+                        Triangles = MagentaTriangles;
+                        Squares = MagentaSquares;
+                    }
+                    else
+                    {
+                        Canny = YellowCannyFrame;
+                        Triangles = YellowTriangles;
+                        Squares = YellowSquares;
+                    }
+                    // Find objects
+                    using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
+                    {
+                        CvInvoke.FindContours(Canny, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+                        for (int c = 0; c < contours.Size; c++)
+                        {
+                            using (VectorOfPoint contour = contours[c])
+                            using (VectorOfPoint approxContour = new VectorOfPoint())
+                            {
+                                CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.05, true);
+                                if (CvInvoke.ContourArea(approxContour, false) > 250) //only consider contours with area greater than 250
+                                {
+                                    if (approxContour.Size == 3) //The contour has 3 vertices, it is a triangle
+                                    {
+                                        Point[] pts = approxContour.ToArray();
+                                        Triangles.Add(new Triangle2DF(
+                                           pts[0],
+                                           pts[1],
+                                           pts[2]
+                                           ));
+                                    }
+                                    else if (approxContour.Size == 4) //The contour has 4 vertices.
+                                    {
+                                        bool isRectangle = true;
+                                        Point[] pts = approxContour.ToArray();
+                                        LineSegment2D[] edges = PointCollection.PolyLine(pts, true);
+
+                                        for (int j = 0; j < edges.Length; j++)
+                                        {
+                                            double angle = Math.Abs(
+                                               edges[(j + 1) % edges.Length].GetExteriorAngleDegree(edges[j]));
+                                            if (angle < 80 || angle > 100)
+                                            {
+                                                isRectangle = false;
+                                                break;
+                                            }
+                                        }
+
+                                        if (isRectangle) Squares.Add(CvInvoke.MinAreaRect(approxContour));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 _FoundObjects.Clear();
                 int i = 0;
+
+                // ---------------------------------------------------------------------------------------------------------------------
 
                 if (RedCircles != null && RedCircles.Length > 0)
                 {
                     foreach(CircleF Circle in RedCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Červený kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Červený kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
@@ -470,7 +585,7 @@ namespace FEI.IRK.HM.VZ
                 {
                     foreach (CircleF Circle in GreenCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Zelený kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Zelený kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
@@ -479,7 +594,7 @@ namespace FEI.IRK.HM.VZ
                 {
                     foreach (CircleF Circle in BlueCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Modrý kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Modrý kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
@@ -488,7 +603,7 @@ namespace FEI.IRK.HM.VZ
                 {
                     foreach (CircleF Circle in CyanCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Tyrkysový kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Tyrkysový kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
@@ -497,7 +612,7 @@ namespace FEI.IRK.HM.VZ
                 {
                     foreach (CircleF Circle in MagentaCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Purpurový kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Purpurový kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
@@ -506,10 +621,124 @@ namespace FEI.IRK.HM.VZ
                 {
                     foreach (CircleF Circle in YellowCircles)
                     {
-                        _FoundObjects.Add(String.Format("[{0}] Žltý kruh - X = {1}; Y = {2}; R = {3}", ++i, Circle.Center.X.ToString("C3"), Circle.Center.Y.ToString("C3"), Circle.Radius.ToString("C3")));
+                        _FoundObjects.Add(String.Format("[{0}] Žltý kruh - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Circle.Radius / 2))));
                         CvInvoke.Circle(CaptureFrame, new Point((int)Circle.Center.X, (int)Circle.Center.Y), (int)Circle.Radius, new MCvScalar(255, 255, 255));
                     }
                 }
+
+                // ---------------------------------------------------------------------------------------------------------------------
+
+                if (RedTriangles != null && RedTriangles.Count > 0)
+                {
+                    foreach(Triangle2DF Triangle in RedTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Červený trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (GreenTriangles != null && GreenTriangles.Count > 0)
+                {
+                    foreach (Triangle2DF Triangle in GreenTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Zelený trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (BlueTriangles != null && BlueTriangles.Count > 0)
+                {
+                    foreach (Triangle2DF Triangle in BlueTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Modrý trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (CyanTriangles != null && CyanTriangles.Count > 0)
+                {
+                    foreach (Triangle2DF Triangle in CyanTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Tyrkysový trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (MagentaTriangles != null && MagentaTriangles.Count > 0)
+                {
+                    foreach (Triangle2DF Triangle in MagentaTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Purpurový trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (YellowTriangles != null && YellowTriangles.Count > 0)
+                {
+                    foreach (Triangle2DF Triangle in YellowTriangles)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Žltý trojuholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Math.Sqrt(Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) * Math.Abs(Triangle.Centeroid.X - Triangle.V0.X) + Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y) * Math.Abs(Triangle.Centeroid.Y - Triangle.V0.Y)) / 3))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Triangle.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                // ---------------------------------------------------------------------------------------------------------------------
+
+                if (RedSquares != null && RedSquares.Count > 0)
+                {
+                    foreach(RotatedRect Square in RedSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Červený štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (GreenSquares != null && GreenSquares.Count > 0)
+                {
+                    foreach (RotatedRect Square in GreenSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Zelený štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (BlueSquares != null && BlueSquares.Count > 0)
+                {
+                    foreach (RotatedRect Square in BlueSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Modrý štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (CyanSquares != null && CyanSquares.Count > 0)
+                {
+                    foreach (RotatedRect Square in CyanSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Tyrkysový štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (MagentaSquares != null && MagentaSquares.Count > 0)
+                {
+                    foreach (RotatedRect Square in MagentaSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Purpurový štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                if (YellowSquares != null && YellowSquares.Count > 0)
+                {
+                    foreach (RotatedRect Square in YellowSquares)
+                    {
+                        _FoundObjects.Add(String.Format("[{0}] Žltý štvoruholník - Vzdialenosť = {1} cm", ++i, (50 * 40 / (Square.Size.Width / 4))));
+                        CvInvoke.Polylines(CaptureFrame, Array.ConvertAll(Square.GetVertices(), Point.Round), true, new MCvScalar(255, 255, 255));
+                    }
+                }
+
+                // ---------------------------------------------------------------------------------------------------------------------
 
 
                 if (FoundObjectsUpdated != null)

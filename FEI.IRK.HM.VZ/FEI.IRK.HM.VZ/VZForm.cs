@@ -85,6 +85,7 @@ namespace FEI.IRK.HM.VZ
             NumericMinRadius.Enabled = true;
             NumericMaxRadius.Enabled = true;
             NumericMinThreshold.Enabled = true;
+            NumericMinDistance.Enabled = true;
         }
 
         private void EventBitmapChanged(Bitmap bmp)
@@ -153,6 +154,11 @@ namespace FEI.IRK.HM.VZ
             Task1.StartCapture();
         }
 
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+            Task1.PauseCapture();
+        }
+
         private void ButtonStop_Click(object sender, EventArgs e)
         {
             Task1.StopCapture();
@@ -196,6 +202,7 @@ namespace FEI.IRK.HM.VZ
                 NumericMinRadius.Enabled = false;
                 NumericMaxRadius.Enabled = false;
                 NumericMinThreshold.Enabled = false;
+                NumericMinDistance.Enabled = false;
                 ImgShowRadio1.Enabled = false;
                 ImgShowRadio2.Enabled = false;
                 ImgShowRadio3.Enabled = false;
@@ -212,6 +219,7 @@ namespace FEI.IRK.HM.VZ
             NumericMinRadius.Enabled = false;
             NumericMaxRadius.Enabled = false;
             NumericMinThreshold.Enabled = false;
+            NumericMinDistance.Enabled = false;
             ImgShowRadio1.Enabled = false;
             ImgShowRadio2.Enabled = false;
             ImgShowRadio3.Enabled = false;
@@ -234,6 +242,11 @@ namespace FEI.IRK.HM.VZ
             Task2.MinThreshold = (int)NumericMinThreshold.Value;
         }
 
+        private void NumericMinDistance_ValueChanged(object sender, EventArgs e)
+        {
+            Task2.MinDistance = (int)NumericMinDistance.Value;
+        }
+
         private void ImgShowRadio1_CheckedChanged(object sender, EventArgs e)
         {
             Task2.ShowImage(1);
@@ -253,5 +266,7 @@ namespace FEI.IRK.HM.VZ
         {
             Task2.ShowImage(4);
         }
+
+        
     }
 }

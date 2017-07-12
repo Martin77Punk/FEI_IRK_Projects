@@ -28,6 +28,7 @@ namespace FEI.IRK.HM.VZ
         private int _MinRadius;
         private int _MaxRadius;
         private int _MinThreshold;
+        private int _MinDistance;
 
         public delegate void BitmapChangedFunction(Bitmap bmp);
         public event BitmapChangedFunction BitmapChanged;
@@ -93,6 +94,19 @@ namespace FEI.IRK.HM.VZ
         }
 
 
+        public int MinDistance
+        {
+            get
+            {
+                return _MinDistance;
+            }
+            set
+            {
+                _MinDistance = value;
+            }
+        }
+
+
         public VZTask2()
         {
             _ImgLoaded = false;
@@ -102,7 +116,8 @@ namespace FEI.IRK.HM.VZ
             ProcessingThread = null;
             _MinRadius = 60;
             _MaxRadius = 130;
-            _MinThreshold = 200;
+            _MinThreshold = 100;
+            _MinDistance = 20;
             BaseImage = new Bitmap(800, 600);
             SobelImage = new Bitmap(800, 600);
             HoughImage = new Bitmap(800, 600);
@@ -261,15 +276,69 @@ namespace FEI.IRK.HM.VZ
             
             // Najdenie lokalnych maxim + ulozenie kruznic
             List<HoughCircle> HoughCircles = new List<HoughCircle>();
-            for (int r = 0; r <= (_MaxRadius - _MinRadius); r++)
+            //for (int r = 0; r <= (_MaxRadius - _MinRadius); r++)
+            for (int r = 1; r < (_MaxRadius - _MinRadius); r++)
             {
                 for (int x = 1; x < SobelImage.Width - 1; x++)
                 {
                     for (int y = 1; y < SobelImage.Height - 1; y++)
                     {
-                        if (Accumulator[x, y, r] > _MinThreshold && Accumulator[x, y, r] > Accumulator[x - 1, y, r] && Accumulator[x, y, r] > Accumulator[x + 1, y, r] && Accumulator[x, y, r] > Accumulator[x, y - 1, r] && Accumulator[x, y, r] > Accumulator[x, y + 1, r])
+                        //if (Accumulator[x, y, r] > _MinThreshold && Accumulator[x, y, r] > Accumulator[x - 1, y, r] && Accumulator[x, y, r] > Accumulator[x + 1, y, r] && Accumulator[x, y, r] > Accumulator[x, y - 1, r] && Accumulator[x, y, r] > Accumulator[x, y + 1, r])
+                        //{
+                        //    HoughCircles.Add(new HoughCircle() { X = x, Y = y, Radius = r});
+                        //}
+                        if (Accumulator[x, y, r] > _MinThreshold &&
+                            Accumulator[x, y, r] > Accumulator[x, y, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y + 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x, y + 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x, y - 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y - 1, r - 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y, r] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y + 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x, y + 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y, r] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x, y - 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y - 1, r] &&
+                            Accumulator[x, y, r] > Accumulator[x, y, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y + 1, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x, y + 1, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x + 1, y + 1, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x, y - 1, r + 1] &&
+                            Accumulator[x, y, r] > Accumulator[x - 1, y - 1, r + 1]
+                            )
                         {
-                            HoughCircles.Add(new HoughCircle() { X = x, Y = y, Radius = r});
+                            bool OkToInsert = true;
+                            if (_MinDistance > 0)
+                            {
+                                foreach (HoughCircle Circle in HoughCircles)
+                                {
+                                    if ( (((x - Circle.X) * (x - Circle.X)) + ((y - Circle.Y) * (y - Circle.Y))) < (_MinDistance * _MinDistance)  )
+                                    {
+                                        if (Circle.Threshold < Accumulator[x, y, r])
+                                        {
+                                            HoughCircles.Remove(Circle);
+                                        }
+                                        else
+                                        {
+                                            OkToInsert = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (OkToInsert)
+                            {
+                                HoughCircles.Add(new HoughCircle() { X = x, Y = y, Radius = r, Threshold = Accumulator[x, y, r] });
+                            }                            
                         }
                     }
                 }
@@ -308,6 +377,11 @@ namespace FEI.IRK.HM.VZ
                     }
                 }
             }
+
+            // Uvolnit miesto
+            Accumulator = null;
+            EdgeMap = null;
+            GC.Collect();
 
             _InProgress = false;
             _ImgLoaded = true;
@@ -527,6 +601,7 @@ namespace FEI.IRK.HM.VZ
         public int X;
         public int Y;
         public int Radius;
+        public int Threshold;
     }
 
 }
